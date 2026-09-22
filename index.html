@@ -11,39 +11,45 @@
 
     header { display: flex; justify-content: space-between; align-items: center; padding: 18px 5%; background: #ffffff; border-bottom: 1px solid #f1f5f9; position: sticky; top: 0; z-index: 50; }
     .logo { font-weight: 800; font-size: 1.1rem; letter-spacing: 1.5px; text-transform: uppercase; }
-    nav a { text-decoration: none; color: #64748b; font-size: 0.9rem; margin-right: 20px; font-weight: 500; }
+    nav a { text-decoration: none; color: #64748b; font-size: 0.9rem; font-weight: 500; }
     nav a:hover { color: #000; }
 
-    .hero { text-align: left; padding: 50px 5% 30px; max-width: 800px; }
+    .hero { text-align: left; padding: 40px 5% 24px; max-width: 800px; }
     .hero span { font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: #94a3b8; font-weight: 700; }
-    .hero h1 { font-size: 2.8rem; font-weight: 800; margin: 12px 0; line-height: 1.1; color: #0f172a; }
+    .hero h1 { font-size: 2.6rem; font-weight: 800; margin: 12px 0; line-height: 1.1; color: #0f172a; }
     .hero h1 em { font-style: italic; font-weight: 400; font-family: serif; }
-    .hero p { color: #64748b; font-size: 0.95rem; line-height: 1.5; margin-bottom: 24px; }
-    .hero .btn { display: inline-block; background: #000000; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 0.9rem; }
+    .hero p { color: #64748b; font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px; }
+    .hero .btn { display: inline-block; background: #000000; color: #ffffff; padding: 10px 22px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 0.85rem; }
 
-    .category-chips { display: flex; gap: 12px; padding: 10px 5% 30px; overflow-x: auto; }
-    .chip { padding: 8px 18px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 0.85rem; font-weight: 600; color: #475569; cursor: pointer; white-space: nowrap; }
+    .category-chips { display: flex; gap: 10px; padding: 10px 5% 24px; overflow-x: auto; }
+    .chip { padding: 6px 16px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 0.85rem; font-weight: 600; color: #475569; cursor: pointer; white-space: nowrap; }
     .chip.active { background: #000; color: #fff; border-color: #000; }
 
     .section-title { padding: 0 5%; font-size: 1.25rem; font-weight: 700; margin-bottom: 16px; }
 
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; padding: 0 5% 60px; }
-    .card { border: 1px solid #f1f5f9; border-radius: 10px; overflow: hidden; background: #fff; display: flex; flex-direction: column; transition: transform 0.15s ease; }
-    .card-img { width: 100%; height: 180px; object-fit: cover; background: #f8fafc; }
+    .card { border: 1px solid #f1f5f9; border-radius: 12px; overflow: hidden; background: #fff; display: flex; flex-direction: column; }
+    .card-img { width: 100%; height: 190px; object-fit: cover; background: #f8fafc; }
     .card-body { padding: 12px; display: flex; flex-direction: column; flex-grow: 1; }
     .cat-tag { font-size: 0.65rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px; }
-    .p-title { font-size: 0.9rem; font-weight: 600; color: #1e293b; margin-bottom: 6px; }
-    .p-price { font-size: 0.95rem; font-weight: 700; color: #0f172a; margin-bottom: 12px; }
-    .order-btn { margin-top: auto; width: 100%; padding: 8px; border: 1px solid #000; background: #fff; color: #000; font-weight: 600; font-size: 0.8rem; border-radius: 6px; cursor: pointer; }
-    .order-btn:hover { background: #000; color: #fff; }
+    .p-title { font-size: 0.95rem; font-weight: 600; color: #1e293b; margin-bottom: 4px; }
+    .p-price { font-size: 1.05rem; font-weight: 700; color: #0f172a; margin-bottom: 12px; }
+    .order-btn { margin-top: auto; width: 100%; padding: 9px; border: 1px solid #000; background: #000; color: #fff; font-weight: 600; font-size: 0.85rem; border-radius: 6px; cursor: pointer; }
 
     /* Modal */
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 16px; }
-    .modal-card { background: #fff; border-radius: 12px; padding: 22px; width: 100%; max-width: 380px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 1000; align-items: center; justify-content: center; padding: 16px; }
+    .modal-card { background: #fff; border-radius: 12px; padding: 20px; width: 100%; max-width: 380px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.15); max-height: 90vh; overflow-y: auto; }
+    .modal-card label { display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #64748b; margin-bottom: 6px; }
+    
+    /* Size Selector */
+    .size-picker { display: flex; gap: 8px; margin-bottom: 14px; }
+    .size-btn { flex: 1; padding: 8px; border: 1px solid #cbd5e1; background: #fff; border-radius: 6px; font-weight: 700; font-size: 0.85rem; cursor: pointer; text-align: center; }
+    .size-btn.selected { background: #000; color: #fff; border-color: #000; }
+
     .modal-card input, .modal-card textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; }
-    .modal-actions { display: flex; gap: 8px; margin-top: 8px; }
-    .btn-submit { flex: 1; padding: 10px; background: #000; color: #fff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
-    .btn-cancel { flex: 1; padding: 10px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; font-weight: 600; cursor: pointer; }
+    .modal-actions { display: flex; gap: 8px; margin-top: 10px; }
+    .btn-submit { flex: 1; padding: 11px; background: #000; color: #fff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
+    .btn-cancel { flex: 1; padding: 11px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; font-weight: 600; cursor: pointer; }
   </style>
 </head>
 <body>
@@ -74,16 +80,29 @@
     <p style="grid-column: 1/-1; text-align:center; color:#94a3b8; padding:30px;">Connecting to store...</p>
   </div>
 
+  <!-- Order Modal with Size Selector -->
   <div class="modal-overlay" id="orderModal">
     <div class="modal-card">
-      <h3 id="modalTitle" style="margin-bottom:4px;">Place Order</h3>
-      <p id="modalPrice" style="color:#059669; font-weight:bold; margin-bottom:14px;">₹0</p>
-      <input type="text" id="custName" placeholder="Your Name" required />
-      <input type="tel" id="custPhone" placeholder="Mobile Number" required />
-      <textarea id="custAddress" rows="3" placeholder="Full Delivery Address" required></textarea>
+      <h3 id="modalTitle" style="margin-bottom:2px;">Place Order</h3>
+      <p id="modalPrice" style="color:#059669; font-weight:bold; font-size:1.1rem; margin-bottom:14px;">₹0</p>
+      
+      <label>Select Size</label>
+      <div class="size-picker" id="sizeBox">
+        <button type="button" class="size-btn" onclick="selectSize(this, 'S')">S</button>
+        <button type="button" class="size-btn selected" onclick="selectSize(this, 'M')">M</button>
+        <button type="button" class="size-btn" onclick="selectSize(this, 'L')">L</button>
+        <button type="button" class="size-btn" onclick="selectSize(this, 'XL')">XL</button>
+        <button type="button" class="size-btn" onclick="selectSize(this, 'XXL')">XXL</button>
+      </div>
+
+      <label>Delivery Details</label>
+      <input type="text" id="custName" placeholder="Your Full Name" required />
+      <input type="tel" id="custPhone" placeholder="Mobile Number (WhatsApp)" required />
+      <textarea id="custAddress" rows="3" placeholder="Full Delivery Address with Pincode" required></textarea>
+      
       <div class="modal-actions">
         <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-        <button class="btn-submit" id="submitBtn" onclick="submitOrder()">Confirm Order</button>
+        <button class="btn-submit" id="submitBtn" onclick="submitOrder()">Confirm Order (COD)</button>
       </div>
     </div>
   </div>
@@ -95,6 +114,13 @@
 
     let allProducts = [];
     let selectedItem = null;
+    let chosenSize = "M";
+
+    function selectSize(btn, size) {
+      document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      chosenSize = size;
+    }
 
     async function fetchProducts() {
       const grid = document.getElementById("productGrid");
@@ -117,7 +143,7 @@
             <span class="cat-tag">${p.category || 'Fashion'}</span>
             <div class="p-title">${p.name}</div>
             <div class="p-price">₹${Number(p.price).toFixed(2)}</div>
-            <button class="order-btn" onclick="openOrder('${p.name}', ${p.price}, ${p.id})">Add to Cart</button>
+            <button class="order-btn" onclick="openOrder('${p.name}', ${p.price}, ${p.id})">Buy Now</button>
           </div>
         </div>
       `).join("");
@@ -136,6 +162,8 @@
 
     function openOrder(name, price, id) {
       selectedItem = { name, price, id };
+      chosenSize = "M";
+      document.querySelectorAll('.size-btn').forEach(b => b.classList.toggle('selected', b.innerText === 'M'));
       document.getElementById("modalTitle").innerText = name;
       document.getElementById("modalPrice").innerText = "₹" + Number(price).toFixed(2);
       document.getElementById("orderModal").style.display = "flex";
@@ -159,12 +187,14 @@
       btn.innerText = "Placing...";
       btn.disabled = true;
 
+      const itemWithDetails = `${selectedItem.name} (Size: ${chosenSize})`;
+
       const orderData = {
         customer_name: name,
         phone: phone,
         address: address,
         total: selectedItem.price,
-        items: [{ product: selectedItem.name, price: selectedItem.price, qty: 1 }]
+        items: [{ product: itemWithDetails, price: selectedItem.price, qty: 1 }]
       };
 
       const { error } = await client.from("orders").insert([orderData]);
@@ -172,10 +202,10 @@
       if (error) {
         alert("Error: " + error.message);
       } else {
-        alert("Order placed successfully! Details sent to Admin Panel.");
+        alert("Order placed successfully for " + itemWithDetails + "!");
         closeModal();
       }
-      btn.innerText = "Confirm Order";
+      btn.innerText = "Confirm Order (COD)";
       btn.disabled = false;
     }
 
