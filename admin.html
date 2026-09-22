@@ -3,185 +3,204 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bodoland Fashion - Admin Panel</title>
+  <title>Admin Dashboard - Bodoland Fashion</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { margin: 0; background: #0f172a; color: #f8fafc; padding: 16px; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: #0b1329; color: #f8fafc; padding: 20px; }
     .container { max-width: 900px; margin: 0 auto; }
-    h1 { margin-bottom: 4px; font-size: 1.5rem; }
-    .subtitle { color: #94a3b8; margin-bottom: 16px; font-size: 0.9rem; }
-    .card { background: #1e293b; border-radius: 12px; padding: 16px; margin-bottom: 20px; border: 1px solid #334155; }
-    h2 { margin-top: 0; font-size: 1.15rem; color: #38bdf8; }
-    .form-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 14px; }
-    label { font-size: 0.85rem; color: #94a3b8; margin-bottom: 4px; display: block; }
-    input[type="text"], input[type="number"], input[type="file"] {
-      width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: #fff;
-    }
-    button { background: #0284c7; color: white; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; width: 100%; }
-    .btn-danger { background: #e11d48; padding: 6px 10px; font-size: 0.8rem; width: auto; }
-    .btn-whatsapp { background: #22c55e; color: white; text-decoration: none; padding: 5px 9px; border-radius: 6px; font-size: 0.8rem; font-weight: bold; display: inline-flex; align-items: center; gap: 4px; }
-    .table-responsive { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; margin-top: 8px; min-width: 600px; }
-    th, td { text-align: left; padding: 10px; border-bottom: 1px solid #334155; font-size: 0.85rem; vertical-align: top; }
-    th { color: #94a3b8; font-weight: 600; }
-    .product-thumb { width: 45px; height: 45px; object-fit: cover; border-radius: 6px; background: #334155; }
-    .order-badge { background: #0369a1; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; color: #e0f2fe; }
+    
+    /* Login Gate */
+    #loginGate { display: flex; align-items: center; justify-content: center; min-height: 80vh; }
+    .login-card { background: #16203a; border: 1px solid #1e293b; padding: 30px; border-radius: 12px; width: 100%; max-width: 360px; box-shadow: 0 10px 25px rgba(0,0,0,0.4); text-align: center; }
+    .login-card h2 { margin-bottom: 20px; font-size: 1.3rem; color: #38bdf8; }
+    .login-card input { width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: #fff; margin-bottom: 15px; }
+    .login-card button { width: 100%; padding: 12px; background: #0284c7; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+
+    /* Admin Panel Main */
+    #adminContent { display: none; }
+    h1 { font-size: 1.5rem; margin-bottom: 20px; color: #38bdf8; }
+    .card { background: #16203a; border-radius: 10px; padding: 20px; margin-bottom: 24px; border: 1px solid #1e293b; }
+    h2 { font-size: 1.1rem; margin-bottom: 14px; color: #94a3b8; border-bottom: 1px solid #1e293b; padding-bottom: 8px; }
+    
+    input, select { width: 100%; padding: 10px; margin-bottom: 12px; background: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 6px; }
+    .btn { background: #0284c7; color: white; padding: 10px 16px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; width: 100%; }
+    .btn-danger { background: #dc2626; padding: 6px 12px; border: none; border-radius: 4px; color: white; cursor: pointer; }
+    .logout-btn { background: #334155; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; float: right; font-size: 0.8rem; }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; }
+    th, td { text-align: left; padding: 10px; border-bottom: 1px solid #1e293b; }
+    th { color: #94a3b8; }
+    .order-badge { background: #0369a1; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; }
+    .wa-btn { background: #22c55e; color: #000; text-decoration: none; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.75rem; display: inline-block; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Bodoland Fashion Admin</h1>
-    <p class="subtitle">Products & Live Customer Orders</p>
+
+  <!-- Password Screen -->
+  <div id="loginGate">
+    <div class="login-card">
+      <h2>Admin Login</h2>
+      <input type="password" id="adminPassInput" placeholder="Enter Security Password" />
+      <button onclick="checkPassword()">Unlock Panel</button>
+      <p id="errorMsg" style="color: #ef4444; font-size: 0.85rem; margin-top: 10px; display: none;">Incorrect password!</p>
+    </div>
+  </div>
+
+  <!-- Admin Panel Dashboard -->
+  <div class="container" id="adminContent">
+    <div style="overflow: hidden; margin-bottom: 15px;">
+      <button class="logout-btn" onclick="logout()">Lock Panel</button>
+      <h1>Bodoland Fashion Admin</h1>
+    </div>
 
     <!-- Add Product -->
     <div class="card">
       <h2>Add New Product</h2>
-      <form id="productForm">
-        <div class="form-grid">
-          <div><label>Product Name</label><input type="text" id="pName" placeholder="e.g. Traditional Shirt" required /></div>
-          <div><label>Category</label><input type="text" id="pCategory" placeholder="e.g. Shirts, Sarees" required /></div>
-          <div><label>Price (₹)</label><input type="number" step="0.01" id="pPrice" placeholder="550" required /></div>
-          <div><label>Product Image</label><input type="file" id="pImage" accept="image/*" /></div>
-        </div>
-        <button type="submit" id="submitBtn">Add Product</button>
-      </form>
+      <input type="text" id="pName" placeholder="Product Name (e.g. Traditional Shirt)" />
+      <select id="pCat">
+        <option value="Men">Men</option>
+        <option value="Women">Women</option>
+        <option value="Kids">Kids</option>
+      </select>
+      <input type="number" id="pPrice" placeholder="Price (₹)" />
+      <input type="text" id="pImg" placeholder="Image URL (Direct link to photo)" />
+      <button class="btn" id="addBtn" onclick="addProduct()">Add Product</button>
     </div>
 
-    <!-- Products Store -->
+    <!-- Products List -->
     <div class="card">
       <h2>Products in Store</h2>
-      <div class="table-responsive">
-        <table>
-          <thead>
-            <tr><th>Photo</th><th>Name</th><th>Category</th><th>Price</th><th>Action</th></tr>
-          </thead>
-          <tbody id="productsTableBody"><tr><td colspan="5">Loading...</td></tr></tbody>
-        </table>
-      </div>
+      <table id="productsTable">
+        <thead>
+          <tr>
+            <th>Photo</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="productsBody"></tbody>
+      </table>
     </div>
 
     <!-- Customer Orders -->
     <div class="card">
       <h2>Customer Orders</h2>
-      <div class="table-responsive">
-        <table>
-          <thead>
-            <tr>
-              <th>Order ID</th>
-              <th>Customer</th>
-              <th>Items & Total</th>
-              <th>Address</th>
-              <th>Contact</th>
-            </tr>
-          </thead>
-          <tbody id="ordersTableBody"><tr><td colspan="5">Loading orders...</td></tr></tbody>
-        </table>
-      </div>
+      <table id="ordersTable">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Customer</th>
+            <th>Items & Total</th>
+            <th>Address</th>
+            <th>Contact</th>
+          </tr>
+        </thead>
+        <tbody id="ordersBody"></tbody>
+      </table>
     </div>
   </div>
 
   <script>
+    // DEFINE ADMIN PASSWORD HERE
+    const ADMIN_PASSWORD = "admin@bodoland";
+
     const SUPABASE_URL = "https://vtrpbwhupdqzegchyoha.supabase.co";
     const SUPABASE_KEY = "sb_publishable_GSAPqd9xHsp0BkkVYHdrNQ_zw37bsNm";
     const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    async function fetchProducts() {
-      const tbody = document.getElementById("productsTableBody");
-      const { data } = await client.from("products").select("*").order("id", { ascending: false });
-      if (!data || data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="color:#94a3b8;">No products found.</td></tr>`;
-        return;
+    function checkPassword() {
+      const input = document.getElementById("adminPassInput").value;
+      if (input === ADMIN_PASSWORD) {
+        sessionStorage.setItem("isAdminAuthed", "true");
+        showDashboard();
+      } else {
+        document.getElementById("errorMsg").style.display = "block";
       }
-      tbody.innerHTML = data.map(item => `
+    }
+
+    function logout() {
+      sessionStorage.removeItem("isAdminAuthed");
+      location.reload();
+    }
+
+    function showDashboard() {
+      document.getElementById("loginGate").style.display = "none";
+      document.getElementById("adminContent").style.display = "block";
+      loadProducts();
+      loadOrders();
+    }
+
+    window.onload = () => {
+      if (sessionStorage.getItem("isAdminAuthed") === "true") {
+        showDashboard();
+      }
+    };
+
+    async function loadProducts() {
+      const tbody = document.getElementById("productsBody");
+      const { data } = await client.from("products").select("*").order("id", { ascending: false });
+      if (!data) return;
+      tbody.innerHTML = data.map(p => `
         <tr>
-          <td>${item.image_url ? `<img src="${item.image_url}" class="product-thumb"/>` : '-'}</td>
-          <td><b>${item.name}</b></td>
-          <td>${item.category || '-'}</td>
-          <td style="color:#4ade80;">₹${Number(item.price).toFixed(2)}</td>
-          <td><button class="btn-danger" onclick="deleteProduct(${item.id})">Delete</button></td>
+          <td><img src="${p.image_url || 'https://via.placeholder.com/40'}" style="width:36px; height:36px; border-radius:4px; object-fit:cover;" /></td>
+          <td>${p.name}</td>
+          <td>${p.category || '-'}</td>
+          <td style="color:#4ade80;">₹${p.price}</td>
+          <td><button class="btn-danger" onclick="deleteProduct(${p.id})">Delete</button></td>
         </tr>
       `).join("");
     }
 
-    document.getElementById("productForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const btn = document.getElementById("submitBtn");
-      btn.disabled = true;
-      btn.innerText = "Saving...";
-
+    async function addProduct() {
       const name = document.getElementById("pName").value.trim();
-      const category = document.getElementById("pCategory").value.trim();
+      const category = document.getElementById("pCat").value;
       const price = parseFloat(document.getElementById("pPrice").value);
-      const fileInput = document.getElementById("pImage");
-      let imageUrl = null;
+      const image_url = document.getElementById("pImg").value.trim();
 
-      try {
-        if (fileInput.files.length > 0) {
-          const file = fileInput.files[0];
-          const fileName = `${Date.now()}-${file.name.replace(/\s+/g, '_')}`;
-          const { error: upErr } = await client.storage.from("product-images").upload(fileName, file);
-          if (!upErr) {
-            const { data } = client.storage.from("product-images").getPublicUrl(fileName);
-            imageUrl = data.publicUrl;
-          }
-        }
-        await client.from("products").insert([{ name, category, price, image_url: imageUrl }]);
-        alert("Product add ho gaya!");
-        document.getElementById("productForm").reset();
-        fetchProducts();
-      } catch (err) {
-        alert(err.message);
-      } finally {
-        btn.disabled = false;
-        btn.innerText = "Add Product";
-      }
-    });
+      if (!name || isNaN(price)) return alert("Please fill name and price");
 
-    async function deleteProduct(id) {
-      if (!confirm("Are you sure?")) return;
-      await client.from("products").delete().eq("id", id);
-      fetchProducts();
+      const btn = document.getElementById("addBtn");
+      btn.innerText = "Adding...";
+      btn.disabled = true;
+
+      await client.from("products").insert([{ name, category, price, image_url }]);
+      document.getElementById("pName").value = "";
+      document.getElementById("pPrice").value = "";
+      document.getElementById("pImg").value = "";
+
+      btn.innerText = "Add Product";
+      btn.disabled = false;
+      loadProducts();
     }
 
-    async function fetchOrders() {
-      const tbody = document.getElementById("ordersTableBody");
-      const { data, error } = await client.from("orders").select("*").order("id", { ascending: false });
+    async function deleteProduct(id) {
+      if (!confirm("Are you sure you want to delete this product?")) return;
+      await client.from("products").delete().eq("id", id);
+      loadProducts();
+    }
 
-      if (error || !data || data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="color:#94a3b8;">No orders found.</td></tr>`;
-        return;
-      }
+    async function loadOrders() {
+      const tbody = document.getElementById("ordersBody");
+      const { data } = await client.from("orders").select("*").order("id", { ascending: false });
+      if (!data) return;
 
       tbody.innerHTML = data.map(o => {
-        const phone = o.phone || o.customer_phone || "";
-        const cleanPhone = phone.replace(/[^0-9]/g, "");
-        const formattedPhone = cleanPhone.length === 10 ? "91" + cleanPhone : cleanPhone;
-        const msg = encodeURIComponent(`Hello ${o.customer_name || 'Customer'}, regarding your order #${o.id} at Bodoland Fashion...`);
-        const itemSummary = o.product_name ? o.product_name : (Array.isArray(o.items) ? o.items.map(i => i.product).join(", ") : "-");
-
+        const phone = o.phone || "";
+        const itemSummary = Array.isArray(o.items) ? o.items.map(i => i.product).join(", ") : (o.product_name || "-");
         return `
           <tr>
             <td><span class="order-badge">#${o.id}</span></td>
-            <td>
-              <strong>${o.customer_name || 'Anonymous'}</strong><br/>
-              <span style="color:#94a3b8; font-size:0.8rem;">${phone}</span>
-            </td>
-            <td>
-              <div>${itemSummary}</div>
-              <strong style="color:#4ade80;">₹${o.total || o.price || 0}</strong>
-            </td>
-            <td style="max-width:180px; word-break:break-word;">${o.address || '-'}</td>
-            <td>
-              ${phone ? `<a href="https://wa.me/${formattedPhone}?text=${msg}" target="_blank" class="btn-whatsapp">WhatsApp</a>` : '-'}
-            </td>
+            <td><strong>${o.customer_name || 'Anonymous'}</strong><br/><span style="color:#94a3b8; font-size:0.8rem;">${phone}</span></td>
+            <td>${itemSummary}<br/><strong style="color:#4ade80;">₹${o.total || o.price || 0}</strong></td>
+            <td style="max-width:180px;">${o.address || '-'}</td>
+            <td><a href="https://wa.me/91${phone.replace(/[^0-9]/g, '')}" target="_blank" class="wa-btn">WhatsApp</a></td>
           </tr>
         `;
       }).join("");
     }
-
-    fetchProducts();
-    fetchOrders();
   </script>
 </body>
 </html>
