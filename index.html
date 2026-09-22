@@ -7,127 +7,83 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: #fcfcfc; color: #111827; }
+    body { background-color: #ffffff; color: #111827; }
 
-    /* Header Navigation */
     header { display: flex; justify-content: space-between; align-items: center; padding: 18px 5%; background: #ffffff; border-bottom: 1px solid #f1f5f9; position: sticky; top: 0; z-index: 50; }
     .logo { font-weight: 800; font-size: 1.1rem; letter-spacing: 1.5px; text-transform: uppercase; }
-    nav { display: flex; align-items: center; gap: 20px; font-size: 0.88rem; font-weight: 500; }
-    nav a { text-decoration: none; color: #475569; transition: color 0.2s; }
+    nav a { text-decoration: none; color: #64748b; font-size: 0.9rem; margin-right: 20px; font-weight: 500; }
     nav a:hover { color: #000; }
-    .cart-btn { background: #111827; color: white; padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; text-decoration: none; display: flex; align-items: center; gap: 6px; }
 
-    /* Hero Section */
-    .hero { padding: 60px 5% 40px; max-width: 900px; }
-    .badge { font-size: 0.7rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #64748b; margin-bottom: 12px; }
-    .hero h1 { font-size: 3rem; font-weight: 800; line-height: 1.1; margin-bottom: 15px; letter-spacing: -0.5px; }
-    .hero p { font-size: 0.95rem; color: #64748b; margin-bottom: 25px; line-height: 1.5; }
-    .hero-btn { display: inline-block; background: #000000; color: #ffffff; padding: 12px 28px; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: 600; }
+    .hero { text-align: left; padding: 50px 5% 30px; max-width: 800px; }
+    .hero span { font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: #94a3b8; font-weight: 700; }
+    .hero h1 { font-size: 2.8rem; font-weight: 800; margin: 12px 0; line-height: 1.1; color: #0f172a; }
+    .hero h1 em { font-style: italic; font-weight: 400; font-family: serif; }
+    .hero p { color: #64748b; font-size: 0.95rem; line-height: 1.5; margin-bottom: 24px; }
+    .hero .btn { display: inline-block; background: #000000; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 0.9rem; }
 
-    /* Category Navigation Cards */
-    .categories { display: flex; gap: 15px; padding: 10px 5% 40px; overflow-x: auto; scrollbar-width: none; }
-    .category-chip { flex: 1; min-width: 100px; background: #ffffff; border: 1px solid #f1f5f9; border-radius: 12px; padding: 16px 10px; text-align: center; cursor: pointer; transition: all 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
-    .category-chip:hover, .category-chip.active { border-color: #cbd5e1; background: #f8fafc; }
-    .category-chip .icon { font-size: 1.5rem; margin-bottom: 6px; display: block; }
-    .category-chip span { font-size: 0.8rem; font-weight: 600; color: #334155; }
+    .category-chips { display: flex; gap: 12px; padding: 10px 5% 30px; overflow-x: auto; }
+    .chip { padding: 8px 18px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 0.85rem; font-weight: 600; color: #475569; cursor: pointer; white-space: nowrap; }
+    .chip.active { background: #000; color: #fff; border-color: #000; }
 
-    /* Product Section */
-    .products-section { padding: 20px 5% 80px; max-width: 1200px; margin: 0 auto; }
-    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-    .section-title h2 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; }
-    .section-title span { font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
+    .section-title { padding: 0 5%; font-size: 1.25rem; font-weight: 700; margin-bottom: 16px; }
 
-    /* Product Grid & Clean Cards */
-    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
-    .product-card { background: #ffffff; border-radius: 10px; overflow: hidden; border: 1px solid #f1f5f9; display: flex; flex-direction: column; transition: transform 0.2s, box-shadow 0.2s; }
-    .product-card:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
-    .img-box { width: 100%; height: 210px; background: #f8fafc; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-    .img-box img { width: 100%; height: 100%; object-fit: cover; }
-    .card-info { padding: 12px 14px 16px; display: flex; flex-direction: column; flex-grow: 1; }
-    .cat-label { font-size: 0.65rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
-    .prod-name { font-size: 0.95rem; font-weight: 600; color: #1e293b; margin-bottom: 6px; }
-    .prod-price { font-size: 1.05rem; font-weight: 700; color: #0f172a; margin-bottom: 12px; }
-    .buy-btn { width: 100%; background: #ffffff; border: 1px solid #cbd5e1; color: #1e293b; padding: 8px; border-radius: 6px; font-weight: 600; font-size: 0.8rem; cursor: pointer; margin-top: auto; transition: all 0.2s; }
-    .buy-btn:hover { background: #000; color: #fff; border-color: #000; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; padding: 0 5% 60px; }
+    .card { border: 1px solid #f1f5f9; border-radius: 10px; overflow: hidden; background: #fff; display: flex; flex-direction: column; transition: transform 0.15s ease; }
+    .card-img { width: 100%; height: 180px; object-fit: cover; background: #f8fafc; }
+    .card-body { padding: 12px; display: flex; flex-direction: column; flex-grow: 1; }
+    .cat-tag { font-size: 0.65rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px; }
+    .p-title { font-size: 0.9rem; font-weight: 600; color: #1e293b; margin-bottom: 6px; }
+    .p-price { font-size: 0.95rem; font-weight: 700; color: #0f172a; margin-bottom: 12px; }
+    .order-btn { margin-top: auto; width: 100%; padding: 8px; border: 1px solid #000; background: #fff; color: #000; font-weight: 600; font-size: 0.8rem; border-radius: 6px; cursor: pointer; }
+    .order-btn:hover { background: #000; color: #fff; }
 
-    /* Checkout Modal */
-    .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(2px); align-items: center; justify-content: center; padding: 20px; z-index: 100; }
-    .modal-content { background: #ffffff; padding: 24px; border-radius: 12px; width: 100%; max-width: 380px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
-    .modal-content h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 4px; }
-    .modal-content p { color: #059669; font-weight: 700; margin-bottom: 16px; font-size: 1rem; }
-    .modal input, .modal textarea { width: 100%; padding: 10px 12px; margin-bottom: 12px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 0.85rem; outline: none; }
-    .modal input:focus, .modal textarea:focus { border-color: #000; }
-    .modal-actions { display: flex; gap: 8px; margin-top: 4px; }
-    .modal-actions button { flex: 1; padding: 10px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer; }
-    .btn-close { background: #f1f5f9; border: 1px solid #e2e8f0; color: #475569; }
-    .btn-submit { background: #000000; border: 1px solid #000; color: #fff; }
+    /* Modal */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; padding: 16px; }
+    .modal-card { background: #fff; border-radius: 12px; padding: 22px; width: 100%; max-width: 380px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+    .modal-card input, .modal-card textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; }
+    .modal-actions { display: flex; gap: 8px; margin-top: 8px; }
+    .btn-submit { flex: 1; padding: 10px; background: #000; color: #fff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
+    .btn-cancel { flex: 1; padding: 10px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; font-weight: 600; cursor: pointer; }
   </style>
 </head>
 <body>
 
-  <!-- Navigation -->
   <header>
-    <div class="logo">Bodoland Fashion</div>
+    <div class="logo">BODOLAND FASHION</div>
     <nav>
-      <a href="#">Home</a>
-      <a href="#collection">Shop</a>
       <a href="admin.html">Admin</a>
-      <a href="#" class="cart-btn">🛒 Cart <span id="cartCount">0</span></a>
     </nav>
   </header>
 
-  <!-- Hero Banner -->
   <section class="hero">
-    <div class="badge">New Collection • 2026</div>
-    <h1>Style that feels<br><i>right.</i></h1>
-    <p>Trendy fashion for men, women and kids — authentic products straight from the Bodoland store.</p>
-    <a href="#collection" class="hero-btn">Shop Now</a>
+    <span>NEW COLLECTION • 2026</span>
+    <h1>Style that feels <em>right.</em></h1>
+    <p>Trendy fashion for men, women and kids — direct from Bodoland Fashion store.</p>
+    <a href="#products" class="btn">Shop Now</a>
   </section>
 
-  <!-- Categories Navigation -->
-  <section class="categories">
-    <div class="category-chip active" onclick="filterCategory('All')">
-      <span class="icon">✨</span>
-      <span>All</span>
-    </div>
-    <div class="category-chip" onclick="filterCategory('Men')">
-      <span class="icon">👔</span>
-      <span>Men</span>
-    </div>
-    <div class="category-chip" onclick="filterCategory('Women')">
-      <span class="icon">👗</span>
-      <span>Women</span>
-    </div>
-    <div class="category-chip" onclick="filterCategory('Kids')">
-      <span class="icon">🧒</span>
-      <span>Kids</span>
-    </div>
-  </section>
+  <div class="category-chips">
+    <button class="chip active" onclick="filterCat('All')">All</button>
+    <button class="chip" onclick="filterCat('Men')">Men</button>
+    <button class="chip" onclick="filterCat('Women')">Women</button>
+    <button class="chip" onclick="filterCat('Kids')">Kids</button>
+  </div>
 
-  <!-- Product Grid -->
-  <section class="products-section" id="collection">
-    <div class="section-header">
-      <div class="section-title">
-        <span>Our Collection</span>
-        <h2>Popular Picks</h2>
-      </div>
-    </div>
-    <div class="product-grid" id="productGrid">
-      <p style="color: #94a3b8;">Loading items...</p>
-    </div>
-  </section>
+  <h2 class="section-title" id="products">Popular Picks</h2>
+  <div class="grid" id="productGrid">
+    <p style="grid-column: 1/-1; text-align:center; color:#94a3b8; padding:30px;">Connecting to store...</p>
+  </div>
 
-  <!-- Buy / Checkout Modal -->
-  <div class="modal" id="orderModal">
-    <div class="modal-content">
-      <h3 id="modalTitle">Complete Order</h3>
-      <p id="modalPrice">₹0</p>
-      <input type="text" id="custName" placeholder="Full Name" required />
+  <div class="modal-overlay" id="orderModal">
+    <div class="modal-card">
+      <h3 id="modalTitle" style="margin-bottom:4px;">Place Order</h3>
+      <p id="modalPrice" style="color:#059669; font-weight:bold; margin-bottom:14px;">₹0</p>
+      <input type="text" id="custName" placeholder="Your Name" required />
       <input type="tel" id="custPhone" placeholder="Mobile Number" required />
-      <textarea id="custAddress" rows="3" placeholder="Shipping Address" required></textarea>
+      <textarea id="custAddress" rows="3" placeholder="Full Delivery Address" required></textarea>
       <div class="modal-actions">
-        <button class="btn-close" onclick="closeModal()">Cancel</button>
-        <button class="btn-submit" id="submitBtn" onclick="submitOrder()">Place Order</button>
+        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+        <button class="btn-submit" id="submitBtn" onclick="submitOrder()">Confirm Order</button>
       </div>
     </div>
   </div>
@@ -140,56 +96,45 @@
     let allProducts = [];
     let selectedItem = null;
 
-    async function fetchStoreProducts() {
+    async function fetchProducts() {
       const grid = document.getElementById("productGrid");
       const { data, error } = await client.from("products").select("*").order("id", { ascending: false });
 
       if (error || !data || data.length === 0) {
-        grid.innerHTML = "<p style='color:#64748b;'>No products currently in store.</p>";
+        grid.innerHTML = "<p style='grid-column: 1/-1; text-align:center; color:#94a3b8; padding:30px;'>No products in store yet. Add some from Admin Panel.</p>";
         return;
       }
-
       allProducts = data;
-      renderCards(allProducts);
+      render(allProducts);
     }
 
-    function renderCards(products) {
+    function render(list) {
       const grid = document.getElementById("productGrid");
-      if (products.length === 0) {
-        grid.innerHTML = "<p style='color:#64748b;'>No products found in this category.</p>";
-        return;
-      }
-
-      grid.innerHTML = products.map(p => `
-        <div class="product-card">
-          <div class="img-box">
-            <img src="${p.image_url || 'https://via.placeholder.com/300x300?text=Fashion'}" alt="${p.name}" />
-          </div>
-          <div class="card-info">
-            <span class="cat-label">${p.category || 'Fashion'}</span>
-            <div class="prod-name">${p.name}</div>
-            <div class="prod-price">₹${Number(p.price).toFixed(2)}</div>
-            <button class="buy-btn" onclick="openOrderModal('${p.name}', ${p.price}, ${p.id})">Add to Cart</button>
+      grid.innerHTML = list.map(p => `
+        <div class="card">
+          <img class="card-img" src="${p.image_url || 'https://via.placeholder.com/300x300?text=No+Image'}" alt="${p.name}" />
+          <div class="card-body">
+            <span class="cat-tag">${p.category || 'Fashion'}</span>
+            <div class="p-title">${p.name}</div>
+            <div class="p-price">₹${Number(p.price).toFixed(2)}</div>
+            <button class="order-btn" onclick="openOrder('${p.name}', ${p.price}, ${p.id})">Add to Cart</button>
           </div>
         </div>
       `).join("");
     }
 
-    function filterCategory(cat) {
-      document.querySelectorAll('.category-chip').forEach(el => el.classList.remove('active'));
-      event.currentTarget.classList.add('active');
-
+    function filterCat(cat) {
+      document.querySelectorAll('.chip').forEach(c => {
+        c.classList.toggle('active', c.innerText === cat);
+      });
       if (cat === 'All') {
-        renderCards(allProducts);
+        render(allProducts);
       } else {
-        const filtered = allProducts.filter(item => 
-          item.category && item.category.toLowerCase() === cat.toLowerCase()
-        );
-        renderCards(filtered);
+        render(allProducts.filter(p => (p.category || '').toLowerCase() === cat.toLowerCase()));
       }
     }
 
-    function openOrderModal(name, price, id) {
+    function openOrder(name, price, id) {
       selectedItem = { name, price, id };
       document.getElementById("modalTitle").innerText = name;
       document.getElementById("modalPrice").innerText = "₹" + Number(price).toFixed(2);
@@ -206,12 +151,12 @@
       const address = document.getElementById("custAddress").value.trim();
 
       if (!name || !phone || !address) {
-        alert("Please enter all details.");
+        alert("Please fill all details!");
         return;
       }
 
       const btn = document.getElementById("submitBtn");
-      btn.innerText = "Processing...";
+      btn.innerText = "Placing...";
       btn.disabled = true;
 
       const orderData = {
@@ -227,14 +172,14 @@
       if (error) {
         alert("Error: " + error.message);
       } else {
-        alert("Order placed successfully! Details sent to Admin.");
+        alert("Order placed successfully! Details sent to Admin Panel.");
         closeModal();
       }
-      btn.innerText = "Place Order";
+      btn.innerText = "Confirm Order";
       btn.disabled = false;
     }
 
-    fetchStoreProducts();
+    fetchProducts();
   </script>
 </body>
 </html>
