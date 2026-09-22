@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#111111">
+<title>Bodoland Fashion</title>
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <nav class="nav">
+    <div class="logo">BODOLAND <span>FASHION</span></div>
+    <button class="menu" onclick="toggleMenu()">☰</button>
+    <div id="navlinks" class="navlinks">
+      <a href="#home">Home</a><a href="#shop">Shop</a><a href="#about">About</a><a href="#contact">Contact</a>
+      <button class="cartBtn" onclick="openCart()">🛒 Cart <b id="cartCount">0</b></button>
+    </div>
+  </nav>
+</header>
+
+<main>
+<section id="home" class="hero">
+  <div class="heroText">
+    <p class="eyebrow">NEW COLLECTION • 2026</p>
+    <h1>Style that feels <em>right.</em></h1>
+    <p>Trendy fashion for men, women and kids—available from Bodoland Fashion.</p>
+    <a class="primary" href="#shop">Shop Now</a>
+  </div>
+</section>
+
+<section class="categories">
+  <div><span>👔</span><h3>Men</h3></div>
+  <div><span>👗</span><h3>Women</h3></div>
+  <div><span>🧒</span><h3>Kids</h3></div>
+</section>
+
+<section id="shop" class="section">
+  <div class="sectionHead">
+    <div><p class="eyebrow">OUR COLLECTION</p><h2>Popular Picks</h2></div>
+    <select id="filter" onchange="renderProducts()"><option value="all">All</option><option value="Men">Men</option><option value="Women">Women</option><option value="Kids">Kids</option></select>
+  </div>
+  <div id="products" class="grid"></div>
+</section>
+
+<section id="about" class="about">
+  <div><p class="eyebrow">ABOUT US</p><h2>Fashion for everyone.</h2></div>
+  <p>Bodoland Fashion is a local fashion shop focused on stylish, comfortable and affordable clothing for everyday life. Browse the collection online and contact us to order or check availability.</p>
+</section>
+
+<section id="contact" class="contact section">
+  <p class="eyebrow">GET IN TOUCH</p><h2>Visit or message us</h2>
+  <div class="contactGrid">
+    <div><b>📍 Shop</b><p>Tihu Chowk, Nalbari, Assam</p></div>
+    <div><b>📱 WhatsApp</b><p>Message us for product availability and orders.</p><a class="whatsapp" href="https://wa.me/916002741197?text=Hello%20Bodoland%20Fashion%2C%20I%20want%20to%20know%20about%20your%20products." target="_blank">Chat on WhatsApp</a></div>
+  </div>
+</section>
+</main>
+
+<footer>© 2026 Bodoland Fashion • Tihu Chowk, Nalbari, Assam</footer>
+
+<div id="cartModal" class="modal">
+ <div class="cartBox"><button class="close" onclick="closeCart()">×</button><h2>Your Cart</h2><div id="cartItems"></div><div class="total">Total: ₹<span id="cartTotal">0</span></div><button class="primary full" onclick="checkout()">Order on WhatsApp</button></div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
