@@ -15,17 +15,24 @@
     .nav-actions a { text-decoration: none; color: #64748b; font-size: 0.9rem; font-weight: 500; }
     .cart-btn { background: #000; color: #fff; padding: 8px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; cursor: pointer; border: none; display: flex; align-items: center; gap: 6px; }
 
-    .hero { text-align: left; padding: 35px 5% 20px; max-width: 800px; }
+    .hero { text-align: left; padding: 30px 5% 16px; max-width: 800px; }
     .hero span { font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: #94a3b8; font-weight: 700; }
-    .hero h1 { font-size: 2.5rem; font-weight: 800; margin: 10px 0; line-height: 1.1; color: #0f172a; }
+    .hero h1 { font-size: 2.3rem; font-weight: 800; margin: 8px 0; line-height: 1.15; color: #0f172a; }
     .hero h1 em { font-style: italic; font-weight: 400; font-family: serif; }
-    .hero p { color: #64748b; font-size: 0.95rem; line-height: 1.5; margin-bottom: 18px; }
+    .hero p { color: #64748b; font-size: 0.9rem; line-height: 1.5; margin-bottom: 16px; }
 
-    .category-chips { display: flex; gap: 10px; padding: 10px 5% 24px; overflow-x: auto; }
+    /* Search and Filter Bar */
+    .controls-bar { padding: 0 5% 16px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .search-input { flex: 2; min-width: 180px; padding: 10px 14px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; outline: none; background: #f8fafc; }
+    .search-input:focus { border-color: #000; background: #fff; }
+    .sort-select { flex: 1; min-width: 130px; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.85rem; background: #fff; outline: none; font-weight: 500; cursor: pointer; }
+
+    .category-chips { display: flex; gap: 10px; padding: 0 5% 20px; overflow-x: auto; }
     .chip { padding: 6px 16px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 0.85rem; font-weight: 600; color: #475569; cursor: pointer; white-space: nowrap; }
     .chip.active { background: #000; color: #fff; border-color: #000; }
 
-    .section-title { padding: 0 5%; font-size: 1.25rem; font-weight: 700; margin-bottom: 16px; }
+    .section-title { padding: 0 5%; font-size: 1.2rem; font-weight: 700; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
+    .results-count { font-size: 0.8rem; color: #94a3b8; font-weight: normal; }
 
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; padding: 0 5% 60px; }
     .card { border: 1px solid #f1f5f9; border-radius: 12px; overflow: hidden; background: #fff; display: flex; flex-direction: column; }
@@ -88,14 +95,27 @@
     <p>Trendy fashion for men, women and kids — direct from Bodoland Fashion store.</p>
   </section>
 
-  <div class="category-chips">
-    <button class="chip active" onclick="filterCat('All')">All</button>
-    <button class="chip" onclick="filterCat('Men')">Men</button>
-    <button class="chip" onclick="filterCat('Women')">Women</button>
-    <button class="chip" onclick="filterCat('Kids')">Kids</button>
+  <!-- Search & Sort Controls -->
+  <div class="controls-bar">
+    <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search clothes, t-shirts, styles..." oninput="applyFilters()" />
+    <select id="sortSelect" class="sort-select" onchange="applyFilters()">
+      <option value="newest">Latest First</option>
+      <option value="price-low">Price: Low to High</option>
+      <option value="price-high">Price: High to Low</option>
+    </select>
   </div>
 
-  <h2 class="section-title">Popular Picks</h2>
+  <div class="category-chips">
+    <button class="chip active" onclick="setCat('All', this)">All</button>
+    <button class="chip" onclick="setCat('Men', this)">Men</button>
+    <button class="chip" onclick="setCat('Women', this)">Women</button>
+    <button class="chip" onclick="setCat('Kids', this)">Kids</button>
+  </div>
+
+  <h2 class="section-title">
+    <span>Popular Picks</span>
+    <span class="results-count" id="countDisplay"></span>
+  </h2>
   <div class="grid" id="productGrid">
     <p style="grid-column: 1/-1; text-align:center; color:#94a3b8; padding:30px;">Loading collection...</p>
   </div>
@@ -171,14 +191,13 @@
   </div>
 
   <script>
-    // Aapki Real UPI ID yahan set kar di gayi hai
     const STORE_UPI_ID = "prnjitboro-3@okaxis";
-
     const SUPABASE_URL = "https://vtrpbwhupdqzegchyoha.supabase.co";
     const SUPABASE_KEY = "sb_publishable_GSAPqd9xHsp0BkkVYHdrNQ_zw37bsNm";
     const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let allProducts = [];
+    let activeCategory = "All";
     let cart = JSON.parse(localStorage.getItem("bodo_cart") || "[]");
     let currentItemForSize = null;
     let selectedTempSize = "M";
@@ -194,12 +213,45 @@
         return;
       }
       allProducts = data;
-      render(allProducts);
+      applyFilters();
       updateCartUI();
+    }
+
+    function setCat(cat, btn) {
+      activeCategory = cat;
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      applyFilters();
+    }
+
+    function applyFilters() {
+      const search = document.getElementById("searchInput").value.toLowerCase().trim();
+      const sortBy = document.getElementById("sortSelect").value;
+
+      let filtered = allProducts.filter(p => {
+        const matchesCat = activeCategory === "All" || (p.category || "").toLowerCase() === activeCategory.toLowerCase();
+        const matchesSearch = !search || (p.name || "").toLowerCase().includes(search) || (p.category || "").toLowerCase().includes(search);
+        return matchesCat && matchesSearch;
+      });
+
+      if (sortBy === "price-low") {
+        filtered.sort((a, b) => Number(a.price) - Number(b.price));
+      } else if (sortBy === "price-high") {
+        filtered.sort((a, b) => Number(b.price) - Number(a.price));
+      } else {
+        filtered.sort((a, b) => b.id - a.id);
+      }
+
+      document.getElementById("countDisplay").innerText = `${filtered.length} item(s)`;
+      render(filtered);
     }
 
     function render(list) {
       const grid = document.getElementById("productGrid");
+      if (list.length === 0) {
+        grid.innerHTML = "<p style='grid-column: 1/-1; text-align:center; color:#94a3b8; padding:30px;'>No matching products found.</p>";
+        return;
+      }
       grid.innerHTML = list.map(p => `
         <div class="card">
           <img class="card-img" src="${p.image_url || 'https://via.placeholder.com/300x300?text=No+Image'}" alt="${p.name}" />
@@ -214,12 +266,6 @@
           </div>
         </div>
       `).join("");
-    }
-
-    function filterCat(cat) {
-      document.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c.innerText === cat));
-      if (cat === 'All') render(allProducts);
-      else render(allProducts.filter(p => (p.category || '').toLowerCase() === cat.toLowerCase()));
     }
 
     function promptSize(id, isBuyNow) {
