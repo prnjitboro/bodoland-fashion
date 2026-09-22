@@ -12,7 +12,6 @@
     header { display: flex; justify-content: space-between; align-items: center; padding: 18px 5%; background: #ffffff; border-bottom: 1px solid #f1f5f9; position: sticky; top: 0; z-index: 50; }
     .logo { font-weight: 800; font-size: 1.1rem; letter-spacing: 1.5px; text-transform: uppercase; }
     nav a { text-decoration: none; color: #64748b; font-size: 0.9rem; font-weight: 500; }
-    nav a:hover { color: #000; }
 
     .hero { text-align: left; padding: 40px 5% 24px; max-width: 800px; }
     .hero span { font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: #94a3b8; font-weight: 700; }
@@ -37,17 +36,26 @@
     .order-btn { margin-top: auto; width: 100%; padding: 9px; border: 1px solid #000; background: #000; color: #fff; font-weight: 600; font-size: 0.85rem; border-radius: 6px; cursor: pointer; }
 
     /* Modal */
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 1000; align-items: center; justify-content: center; padding: 16px; }
-    .modal-card { background: #fff; border-radius: 12px; padding: 20px; width: 100%; max-width: 380px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.15); max-height: 90vh; overflow-y: auto; }
-    .modal-card label { display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #64748b; margin-bottom: 6px; }
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; padding: 16px; }
+    .modal-card { background: #fff; border-radius: 12px; padding: 20px; width: 100%; max-width: 390px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 25px rgba(0,0,0,0.2); }
+    .modal-card label { display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #64748b; margin: 10px 0 6px; }
     
     /* Size Selector */
-    .size-picker { display: flex; gap: 8px; margin-bottom: 14px; }
-    .size-btn { flex: 1; padding: 8px; border: 1px solid #cbd5e1; background: #fff; border-radius: 6px; font-weight: 700; font-size: 0.85rem; cursor: pointer; text-align: center; }
+    .size-picker { display: flex; gap: 8px; margin-bottom: 8px; }
+    .size-btn { flex: 1; padding: 8px; border: 1px solid #cbd5e1; background: #fff; border-radius: 6px; font-weight: 700; font-size: 0.85rem; cursor: pointer; }
     .size-btn.selected { background: #000; color: #fff; border-color: #000; }
 
-    .modal-card input, .modal-card textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; }
-    .modal-actions { display: flex; gap: 8px; margin-top: 10px; }
+    /* Payment Option Selector */
+    .pay-methods { display: flex; gap: 8px; margin-bottom: 12px; }
+    .pay-btn { flex: 1; padding: 9px; border: 1px solid #cbd5e1; background: #fff; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer; }
+    .pay-btn.selected { background: #0284c7; color: #fff; border-color: #0284c7; }
+
+    /* QR Code Display Box */
+    #qrBox { display: none; text-align: center; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 12px; margin-bottom: 12px; }
+    #qrImg { width: 150px; height: 150px; margin: 0 auto; display: block; border-radius: 6px; }
+
+    .modal-card input, .modal-card textarea { width: 100%; padding: 10px; margin-bottom: 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; }
+    .modal-actions { display: flex; gap: 8px; margin-top: 14px; }
     .btn-submit { flex: 1; padding: 11px; background: #000; color: #fff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
     .btn-cancel { flex: 1; padding: 11px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; font-weight: 600; cursor: pointer; }
   </style>
@@ -56,9 +64,7 @@
 
   <header>
     <div class="logo">BODOLAND FASHION</div>
-    <nav>
-      <a href="admin.html">Admin</a>
-    </nav>
+    <nav><a href="admin.html">Admin</a></nav>
   </header>
 
   <section class="hero">
@@ -80,14 +86,14 @@
     <p style="grid-column: 1/-1; text-align:center; color:#94a3b8; padding:30px;">Connecting to store...</p>
   </div>
 
-  <!-- Order Modal with Size Selector -->
+  <!-- Order Modal with Size + UPI QR / COD -->
   <div class="modal-overlay" id="orderModal">
     <div class="modal-card">
-      <h3 id="modalTitle" style="margin-bottom:2px;">Place Order</h3>
-      <p id="modalPrice" style="color:#059669; font-weight:bold; font-size:1.1rem; margin-bottom:14px;">₹0</p>
+      <h3 id="modalTitle" style="margin-bottom:2px;">Checkout</h3>
+      <p id="modalPrice" style="color:#059669; font-weight:bold; font-size:1.15rem; margin-bottom:6px;">₹0</p>
       
-      <label>Select Size</label>
-      <div class="size-picker" id="sizeBox">
+      <label>Choose Size</label>
+      <div class="size-picker">
         <button type="button" class="size-btn" onclick="selectSize(this, 'S')">S</button>
         <button type="button" class="size-btn selected" onclick="selectSize(this, 'M')">M</button>
         <button type="button" class="size-btn" onclick="selectSize(this, 'L')">L</button>
@@ -95,19 +101,35 @@
         <button type="button" class="size-btn" onclick="selectSize(this, 'XXL')">XXL</button>
       </div>
 
+      <label>Payment Method</label>
+      <div class="pay-methods">
+        <button type="button" class="pay-btn selected" id="btnCod" onclick="selectPayment('COD')">Cash on Delivery</button>
+        <button type="button" class="pay-btn" id="btnUpi" onclick="selectPayment('UPI')">UPI / QR Code</button>
+      </div>
+
+      <!-- Live Dynamic UPI QR Box -->
+      <div id="qrBox">
+        <p style="font-size:0.8rem; color:#475569; margin-bottom:8px;">Scan with <b>GPay / PhonePe / Paytm</b> to pay</p>
+        <img id="qrImg" src="" alt="UPI QR Code" />
+        <input type="text" id="upiTxnId" placeholder="Enter UPI UTR / Ref No. after payment" style="margin-top:10px; font-size:0.8rem;" />
+      </div>
+
       <label>Delivery Details</label>
       <input type="text" id="custName" placeholder="Your Full Name" required />
       <input type="tel" id="custPhone" placeholder="Mobile Number (WhatsApp)" required />
-      <textarea id="custAddress" rows="3" placeholder="Full Delivery Address with Pincode" required></textarea>
+      <textarea id="custAddress" rows="3" placeholder="Delivery Address with Pincode" required></textarea>
       
       <div class="modal-actions">
         <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-        <button class="btn-submit" id="submitBtn" onclick="submitOrder()">Confirm Order (COD)</button>
+        <button class="btn-submit" id="submitBtn" onclick="submitOrder()">Place Order</button>
       </div>
     </div>
   </div>
 
   <script>
+    // UPI ID jahan payment aayegi (aap isko apni UPI id se badal sakte hain)
+    const STORE_UPI_ID = "bodolandfashion@upi";
+
     const SUPABASE_URL = "https://vtrpbwhupdqzegchyoha.supabase.co";
     const SUPABASE_KEY = "sb_publishable_GSAPqd9xHsp0BkkVYHdrNQ_zw37bsNm";
     const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -115,6 +137,7 @@
     let allProducts = [];
     let selectedItem = null;
     let chosenSize = "M";
+    let chosenPayment = "COD";
 
     function selectSize(btn, size) {
       document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
@@ -122,12 +145,33 @@
       chosenSize = size;
     }
 
+    function selectPayment(method) {
+      chosenPayment = method;
+      const btnCod = document.getElementById("btnCod");
+      const btnUpi = document.getElementById("btnUpi");
+      const qrBox = document.getElementById("qrBox");
+
+      if (method === 'UPI') {
+        btnUpi.classList.add('selected');
+        btnCod.classList.remove('selected');
+        qrBox.style.display = "block";
+        
+        // Generate Dynamic UPI QR for this product price
+        const upiPayString = `upi://pay?pa=${STORE_UPI_ID}&pn=BodolandFashion&am=${selectedItem.price}&cu=INR`;
+        document.getElementById("qrImg").src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(upiPayString)}`;
+      } else {
+        btnCod.classList.add('selected');
+        btnUpi.classList.remove('selected');
+        qrBox.style.display = "none";
+      }
+    }
+
     async function fetchProducts() {
       const grid = document.getElementById("productGrid");
       const { data, error } = await client.from("products").select("*").order("id", { ascending: false });
 
       if (error || !data || data.length === 0) {
-        grid.innerHTML = "<p style='grid-column: 1/-1; text-align:center; color:#94a3b8; padding:30px;'>No products in store yet. Add some from Admin Panel.</p>";
+        grid.innerHTML = "<p style='grid-column: 1/-1; text-align:center; color:#94a3b8; padding:30px;'>No products in store yet.</p>";
         return;
       }
       allProducts = data;
@@ -150,19 +194,15 @@
     }
 
     function filterCat(cat) {
-      document.querySelectorAll('.chip').forEach(c => {
-        c.classList.toggle('active', c.innerText === cat);
-      });
-      if (cat === 'All') {
-        render(allProducts);
-      } else {
-        render(allProducts.filter(p => (p.category || '').toLowerCase() === cat.toLowerCase()));
-      }
+      document.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c.innerText === cat));
+      if (cat === 'All') render(allProducts);
+      else render(allProducts.filter(p => (p.category || '').toLowerCase() === cat.toLowerCase()));
     }
 
     function openOrder(name, price, id) {
       selectedItem = { name, price, id };
       chosenSize = "M";
+      selectPayment("COD");
       document.querySelectorAll('.size-btn').forEach(b => b.classList.toggle('selected', b.innerText === 'M'));
       document.getElementById("modalTitle").innerText = name;
       document.getElementById("modalPrice").innerText = "₹" + Number(price).toFixed(2);
@@ -177,9 +217,15 @@
       const name = document.getElementById("custName").value.trim();
       const phone = document.getElementById("custPhone").value.trim();
       const address = document.getElementById("custAddress").value.trim();
+      const upiRef = document.getElementById("upiTxnId").value.trim();
 
       if (!name || !phone || !address) {
         alert("Please fill all details!");
+        return;
+      }
+
+      if (chosenPayment === 'UPI' && !upiRef) {
+        alert("Please enter UPI Reference / UTR Number after scanning the QR code!");
         return;
       }
 
@@ -187,12 +233,13 @@
       btn.innerText = "Placing...";
       btn.disabled = true;
 
-      const itemWithDetails = `${selectedItem.name} (Size: ${chosenSize})`;
+      const payNote = chosenPayment === 'UPI' ? `Paid via UPI (Ref: ${upiRef})` : "Cash on Delivery";
+      const itemWithDetails = `${selectedItem.name} [Size: ${chosenSize}] [${payNote}]`;
 
       const orderData = {
         customer_name: name,
         phone: phone,
-        address: address,
+        address: `${address} | Payment: ${payNote}`,
         total: selectedItem.price,
         items: [{ product: itemWithDetails, price: selectedItem.price, qty: 1 }]
       };
@@ -202,10 +249,10 @@
       if (error) {
         alert("Error: " + error.message);
       } else {
-        alert("Order placed successfully for " + itemWithDetails + "!");
+        alert("Order placed successfully! (" + payNote + ")");
         closeModal();
       }
-      btn.innerText = "Confirm Order (COD)";
+      btn.innerText = "Place Order";
       btn.disabled = false;
     }
 
