@@ -9,16 +9,17 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background-color: #ffffff; color: #111827; }
 
-    header { display: flex; justify-content: space-between; align-items: center; padding: 18px 5%; background: #ffffff; border-bottom: 1px solid #f1f5f9; position: sticky; top: 0; z-index: 50; }
+    header { display: flex; justify-content: space-between; align-items: center; padding: 16px 5%; background: #ffffff; border-bottom: 1px solid #f1f5f9; position: sticky; top: 0; z-index: 50; }
     .logo { font-weight: 800; font-size: 1.1rem; letter-spacing: 1.5px; text-transform: uppercase; }
-    nav a { text-decoration: none; color: #64748b; font-size: 0.9rem; font-weight: 500; }
+    .nav-actions { display: flex; align-items: center; gap: 14px; }
+    .nav-actions a { text-decoration: none; color: #64748b; font-size: 0.9rem; font-weight: 500; }
+    .cart-btn { background: #000; color: #fff; padding: 8px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; cursor: pointer; border: none; display: flex; align-items: center; gap: 6px; }
 
-    .hero { text-align: left; padding: 40px 5% 24px; max-width: 800px; }
+    .hero { text-align: left; padding: 35px 5% 20px; max-width: 800px; }
     .hero span { font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: #94a3b8; font-weight: 700; }
-    .hero h1 { font-size: 2.6rem; font-weight: 800; margin: 12px 0; line-height: 1.1; color: #0f172a; }
+    .hero h1 { font-size: 2.5rem; font-weight: 800; margin: 10px 0; line-height: 1.1; color: #0f172a; }
     .hero h1 em { font-style: italic; font-weight: 400; font-family: serif; }
-    .hero p { color: #64748b; font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px; }
-    .hero .btn { display: inline-block; background: #000000; color: #ffffff; padding: 10px 22px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 0.85rem; }
+    .hero p { color: #64748b; font-size: 0.95rem; line-height: 1.5; margin-bottom: 18px; }
 
     .category-chips { display: flex; gap: 10px; padding: 10px 5% 24px; overflow-x: auto; }
     .chip { padding: 6px 16px; border-radius: 20px; border: 1px solid #e2e8f0; background: #fff; font-size: 0.85rem; font-weight: 600; color: #475569; cursor: pointer; white-space: nowrap; }
@@ -28,31 +29,40 @@
 
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; padding: 0 5% 60px; }
     .card { border: 1px solid #f1f5f9; border-radius: 12px; overflow: hidden; background: #fff; display: flex; flex-direction: column; }
-    .card-img { width: 100%; height: 190px; object-fit: cover; background: #f8fafc; }
+    .card-img { width: 100%; height: 180px; object-fit: cover; background: #f8fafc; }
     .card-body { padding: 12px; display: flex; flex-direction: column; flex-grow: 1; }
     .cat-tag { font-size: 0.65rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 4px; }
     .p-title { font-size: 0.95rem; font-weight: 600; color: #1e293b; margin-bottom: 4px; }
-    .p-price { font-size: 1.05rem; font-weight: 700; color: #0f172a; margin-bottom: 12px; }
-    .order-btn { margin-top: auto; width: 100%; padding: 9px; border: 1px solid #000; background: #000; color: #fff; font-weight: 600; font-size: 0.85rem; border-radius: 6px; cursor: pointer; }
+    .p-price { font-size: 1.05rem; font-weight: 700; color: #0f172a; margin-bottom: 10px; }
+    
+    .card-btns { display: flex; gap: 6px; margin-top: auto; }
+    .btn-add-cart { flex: 1; padding: 8px; border: 1px solid #cbd5e1; background: #f8fafc; color: #111; font-weight: 600; font-size: 0.8rem; border-radius: 6px; cursor: pointer; }
+    .btn-buy-now { flex: 1; padding: 8px; border: 1px solid #000; background: #000; color: #fff; font-weight: 600; font-size: 0.8rem; border-radius: 6px; cursor: pointer; }
 
-    /* Modal */
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; padding: 16px; }
+    /* Cart Slide Drawer */
+    .cart-drawer { position: fixed; top: 0; right: -420px; width: 100%; max-width: 380px; height: 100vh; background: #fff; box-shadow: -5px 0 25px rgba(0,0,0,0.15); z-index: 1200; transition: right 0.3s ease; display: flex; flex-direction: column; }
+    .cart-drawer.open { right: 0; }
+    .cart-header { padding: 18px 20px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; }
+    .cart-body { flex: 1; overflow-y: auto; padding: 16px 20px; }
+    .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f1f5f9; }
+    .cart-footer { padding: 20px; border-top: 1px solid #f1f5f9; background: #fcfcfd; }
+    .qty-btn { background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 4px; width: 24px; height: 24px; font-weight: bold; cursor: pointer; }
+
+    /* Size Modal & Checkout Modal */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1100; align-items: center; justify-content: center; padding: 16px; }
     .modal-card { background: #fff; border-radius: 12px; padding: 20px; width: 100%; max-width: 390px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 25px rgba(0,0,0,0.2); }
     .modal-card label { display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #64748b; margin: 10px 0 6px; }
     
-    /* Size Selector */
     .size-picker { display: flex; gap: 8px; margin-bottom: 8px; }
     .size-btn { flex: 1; padding: 8px; border: 1px solid #cbd5e1; background: #fff; border-radius: 6px; font-weight: 700; font-size: 0.85rem; cursor: pointer; }
     .size-btn.selected { background: #000; color: #fff; border-color: #000; }
 
-    /* Payment Option Selector */
     .pay-methods { display: flex; gap: 8px; margin-bottom: 12px; }
     .pay-btn { flex: 1; padding: 9px; border: 1px solid #cbd5e1; background: #fff; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer; }
     .pay-btn.selected { background: #0284c7; color: #fff; border-color: #0284c7; }
 
-    /* QR Code Display Box */
     #qrBox { display: none; text-align: center; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 12px; margin-bottom: 12px; }
-    #qrImg { width: 150px; height: 150px; margin: 0 auto; display: block; border-radius: 6px; }
+    #qrImg { width: 160px; height: 160px; margin: 0 auto; display: block; border-radius: 6px; }
 
     .modal-card input, .modal-card textarea { width: 100%; padding: 10px; margin-bottom: 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; }
     .modal-actions { display: flex; gap: 8px; margin-top: 14px; }
@@ -64,14 +74,18 @@
 
   <header>
     <div class="logo">BODOLAND FASHION</div>
-    <nav><a href="admin.html">Admin</a></nav>
+    <div class="nav-actions">
+      <a href="admin.html">Admin</a>
+      <button class="cart-btn" onclick="toggleCart()">
+        🛒 <span id="cartCount">0</span>
+      </button>
+    </div>
   </header>
 
   <section class="hero">
     <span>NEW COLLECTION • 2026</span>
     <h1>Style that feels <em>right.</em></h1>
     <p>Trendy fashion for men, women and kids — direct from Bodoland Fashion store.</p>
-    <a href="#products" class="btn">Shop Now</a>
   </section>
 
   <div class="category-chips">
@@ -81,53 +95,83 @@
     <button class="chip" onclick="filterCat('Kids')">Kids</button>
   </div>
 
-  <h2 class="section-title" id="products">Popular Picks</h2>
+  <h2 class="section-title">Popular Picks</h2>
   <div class="grid" id="productGrid">
-    <p style="grid-column: 1/-1; text-align:center; color:#94a3b8; padding:30px;">Connecting to store...</p>
+    <p style="grid-column: 1/-1; text-align:center; color:#94a3b8; padding:30px;">Loading collection...</p>
   </div>
 
-  <!-- Order Modal with Size + UPI QR / COD -->
-  <div class="modal-overlay" id="orderModal">
+  <!-- Cart Drawer -->
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+      <h3 style="font-size:1.1rem;">Shopping Cart</h3>
+      <button onclick="toggleCart()" style="background:none; border:none; font-size:1.2rem; cursor:pointer;">✕</button>
+    </div>
+    <div class="cart-body" id="cartItemsList">
+      <p style="text-align:center; color:#94a3b8; margin-top:40px;">Your cart is empty</p>
+    </div>
+    <div class="cart-footer">
+      <div style="display:flex; justify-content:space-between; margin-bottom:14px; font-weight:700; font-size:1.1rem;">
+        <span>Total</span>
+        <span id="cartTotal">₹0.00</span>
+      </div>
+      <button onclick="openCartCheckout()" style="width:100%; padding:12px; background:#000; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Proceed to Checkout</button>
+    </div>
+  </div>
+
+  <!-- Size Modal -->
+  <div class="modal-overlay" id="sizeModal">
     <div class="modal-card">
-      <h3 id="modalTitle" style="margin-bottom:2px;">Checkout</h3>
-      <p id="modalPrice" style="color:#059669; font-weight:bold; font-size:1.15rem; margin-bottom:6px;">₹0</p>
-      
+      <h3 id="sizeModalTitle" style="margin-bottom:4px;">Select Size</h3>
+      <p id="sizeModalPrice" style="color:#059669; font-weight:bold; margin-bottom:12px;">₹0</p>
       <label>Choose Size</label>
       <div class="size-picker">
-        <button type="button" class="size-btn" onclick="selectSize(this, 'S')">S</button>
-        <button type="button" class="size-btn selected" onclick="selectSize(this, 'M')">M</button>
-        <button type="button" class="size-btn" onclick="selectSize(this, 'L')">L</button>
-        <button type="button" class="size-btn" onclick="selectSize(this, 'XL')">XL</button>
-        <button type="button" class="size-btn" onclick="selectSize(this, 'XXL')">XXL</button>
+        <button type="button" class="size-btn" onclick="setSize('S', this)">S</button>
+        <button type="button" class="size-btn selected" onclick="setSize('M', this)">M</button>
+        <button type="button" class="size-btn" onclick="setSize('L', this)">L</button>
+        <button type="button" class="size-btn" onclick="setSize('XL', this)">XL</button>
+        <button type="button" class="size-btn" onclick="setSize('XXL', this)">XXL</button>
       </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeSizeModal()">Cancel</button>
+        <button class="btn-submit" id="confirmSizeBtn">Add to Cart</button>
+      </div>
+    </div>
+  </div>
 
+  <!-- Checkout Modal -->
+  <div class="modal-overlay" id="checkoutModal">
+    <div class="modal-card">
+      <h3 style="margin-bottom:2px;">Complete Order</h3>
+      <p id="checkoutSummary" style="font-size:0.85rem; color:#64748b; margin-bottom:6px;"></p>
+      <p id="checkoutPrice" style="color:#059669; font-weight:bold; font-size:1.2rem; margin-bottom:10px;">₹0</p>
+      
       <label>Payment Method</label>
       <div class="pay-methods">
         <button type="button" class="pay-btn selected" id="btnCod" onclick="selectPayment('COD')">Cash on Delivery</button>
         <button type="button" class="pay-btn" id="btnUpi" onclick="selectPayment('UPI')">UPI / QR Code</button>
       </div>
 
-      <!-- Live Dynamic UPI QR Box -->
       <div id="qrBox">
-        <p style="font-size:0.8rem; color:#475569; margin-bottom:8px;">Scan with <b>GPay / PhonePe / Paytm</b> to pay</p>
-        <img id="qrImg" src="" alt="UPI QR Code" />
-        <input type="text" id="upiTxnId" placeholder="Enter UPI UTR / Ref No. after payment" style="margin-top:10px; font-size:0.8rem;" />
+        <p style="font-size:0.8rem; color:#475569; margin-bottom:8px;">Scan with <b>GPay / PhonePe / Paytm</b> to pay Prnjit Boro</p>
+        <img id="qrImg" src="" alt="UPI QR" />
+        <p style="font-size:0.75rem; color:#0284c7; margin-top:6px; font-weight:bold;">UPI ID: prnjitboro-3@okaxis</p>
+        <input type="text" id="upiTxnId" placeholder="Enter UPI Ref / UTR No. after payment" style="margin-top:10px; font-size:0.8rem;" />
       </div>
 
       <label>Delivery Details</label>
-      <input type="text" id="custName" placeholder="Your Full Name" required />
-      <input type="tel" id="custPhone" placeholder="Mobile Number (WhatsApp)" required />
-      <textarea id="custAddress" rows="3" placeholder="Delivery Address with Pincode" required></textarea>
+      <input type="text" id="custName" placeholder="Full Name" required />
+      <input type="tel" id="custPhone" placeholder="Mobile Number" required />
+      <textarea id="custAddress" rows="3" placeholder="Full Address with Pincode" required></textarea>
       
       <div class="modal-actions">
-        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-        <button class="btn-submit" id="submitBtn" onclick="submitOrder()">Place Order</button>
+        <button class="btn-cancel" onclick="closeCheckoutModal()">Cancel</button>
+        <button class="btn-submit" id="submitBtn" onclick="submitFinalOrder()">Place Order</button>
       </div>
     </div>
   </div>
 
   <script>
-    // UPI ID jahan payment aayegi (aap isko apni UPI id se badal sakte hain)
+    // Aapki Real UPI ID yahan set kar di gayi hai
     const STORE_UPI_ID = "prnjitboro-3@okaxis";
 
     const SUPABASE_URL = "https://vtrpbwhupdqzegchyoha.supabase.co";
@@ -135,14 +179,168 @@
     const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let allProducts = [];
-    let selectedItem = null;
-    let chosenSize = "M";
+    let cart = JSON.parse(localStorage.getItem("bodo_cart") || "[]");
+    let currentItemForSize = null;
+    let selectedTempSize = "M";
     let chosenPayment = "COD";
+    let checkoutItems = [];
+    let checkoutTotalAmount = 0;
 
-    function selectSize(btn, size) {
+    async function fetchProducts() {
+      const grid = document.getElementById("productGrid");
+      const { data, error } = await client.from("products").select("*").order("id", { ascending: false });
+      if (error || !data || data.length === 0) {
+        grid.innerHTML = "<p style='grid-column: 1/-1; text-align:center; color:#94a3b8; padding:30px;'>No products in store yet.</p>";
+        return;
+      }
+      allProducts = data;
+      render(allProducts);
+      updateCartUI();
+    }
+
+    function render(list) {
+      const grid = document.getElementById("productGrid");
+      grid.innerHTML = list.map(p => `
+        <div class="card">
+          <img class="card-img" src="${p.image_url || 'https://via.placeholder.com/300x300?text=No+Image'}" alt="${p.name}" />
+          <div class="card-body">
+            <span class="cat-tag">${p.category || 'Fashion'}</span>
+            <div class="p-title">${p.name}</div>
+            <div class="p-price">₹${Number(p.price).toFixed(2)}</div>
+            <div class="card-btns">
+              <button class="btn-add-cart" onclick="promptSize(${p.id}, false)">+ Cart</button>
+              <button class="btn-buy-now" onclick="promptSize(${p.id}, true)">Buy Now</button>
+            </div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function filterCat(cat) {
+      document.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c.innerText === cat));
+      if (cat === 'All') render(allProducts);
+      else render(allProducts.filter(p => (p.category || '').toLowerCase() === cat.toLowerCase()));
+    }
+
+    function promptSize(id, isBuyNow) {
+      const prod = allProducts.find(p => p.id === id);
+      if (!prod) return;
+      currentItemForSize = prod;
+      selectedTempSize = "M";
+      document.querySelectorAll('.size-btn').forEach(b => b.classList.toggle('selected', b.innerText === 'M'));
+      document.getElementById("sizeModalTitle").innerText = prod.name;
+      document.getElementById("sizeModalPrice").innerText = "₹" + Number(prod.price).toFixed(2);
+      
+      const confirmBtn = document.getElementById("confirmSizeBtn");
+      confirmBtn.innerText = isBuyNow ? "Continue to Buy" : "Add to Cart";
+      confirmBtn.onclick = () => {
+        closeSizeModal();
+        if (isBuyNow) {
+          startSingleCheckout(prod, selectedTempSize);
+        } else {
+          addToCart(prod, selectedTempSize);
+        }
+      };
+      document.getElementById("sizeModal").style.display = "flex";
+    }
+
+    function setSize(size, btn) {
+      selectedTempSize = size;
       document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
       btn.classList.add('selected');
-      chosenSize = size;
+    }
+
+    function closeSizeModal() {
+      document.getElementById("sizeModal").style.display = "none";
+    }
+
+    function addToCart(prod, size) {
+      const existing = cart.find(item => item.id === prod.id && item.size === size);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ id: prod.id, name: prod.name, price: prod.price, size: size, qty: 1 });
+      }
+      saveCart();
+      toggleCart(true);
+    }
+
+    function saveCart() {
+      localStorage.setItem("bodo_cart", JSON.stringify(cart));
+      updateCartUI();
+    }
+
+    function updateCartQty(index, change) {
+      cart[index].qty += change;
+      if (cart[index].qty <= 0) cart.splice(index, 1);
+      saveCart();
+    }
+
+    function updateCartUI() {
+      const countEl = document.getElementById("cartCount");
+      const listEl = document.getElementById("cartItemsList");
+      const totalEl = document.getElementById("cartTotal");
+
+      const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
+      countEl.innerText = totalCount;
+
+      if (cart.length === 0) {
+        listEl.innerHTML = "<p style='text-align:center; color:#94a3b8; margin-top:40px;'>Your cart is empty</p>";
+        totalEl.innerText = "₹0.00";
+        return;
+      }
+
+      let grandTotal = 0;
+      listEl.innerHTML = cart.map((item, idx) => {
+        const itemTotal = item.price * item.qty;
+        grandTotal += itemTotal;
+        return `
+          <div class="cart-item">
+            <div>
+              <div style="font-weight:600; font-size:0.9rem;">${item.name}</div>
+              <div style="font-size:0.75rem; color:#64748b;">Size: <b>${item.size}</b> | ₹${item.price} each</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <button class="qty-btn" onclick="updateCartQty(${idx}, -1)">-</button>
+              <span style="font-weight:bold; font-size:0.85rem;">${item.qty}</span>
+              <button class="qty-btn" onclick="updateCartQty(${idx}, 1)">+</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      totalEl.innerText = "₹" + grandTotal.toFixed(2);
+    }
+
+    function toggleCart(forceOpen = false) {
+      const drawer = document.getElementById("cartDrawer");
+      if (forceOpen) drawer.classList.add("open");
+      else drawer.classList.toggle("open");
+    }
+
+    function startSingleCheckout(prod, size) {
+      checkoutItems = [{ product: `${prod.name} (Size: ${size})`, price: prod.price, qty: 1 }];
+      checkoutTotalAmount = prod.price;
+      launchCheckoutModal(`${prod.name} (Size: ${size})`, prod.price);
+    }
+
+    function openCartCheckout() {
+      if (cart.length === 0) return alert("Your cart is empty!");
+      toggleCart();
+      checkoutItems = cart.map(i => ({ product: `${i.name} (Size: ${i.size})`, price: i.price, qty: i.qty }));
+      checkoutTotalAmount = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+      launchCheckoutModal(`${cart.length} item(s) from Cart`, checkoutTotalAmount);
+    }
+
+    function launchCheckoutModal(summary, amount) {
+      document.getElementById("checkoutSummary").innerText = summary;
+      document.getElementById("checkoutPrice").innerText = "₹" + Number(amount).toFixed(2);
+      selectPayment("COD");
+      document.getElementById("checkoutModal").style.display = "flex";
+    }
+
+    function closeCheckoutModal() {
+      document.getElementById("checkoutModal").style.display = "none";
     }
 
     function selectPayment(method) {
@@ -155,10 +353,8 @@
         btnUpi.classList.add('selected');
         btnCod.classList.remove('selected');
         qrBox.style.display = "block";
-        
-        // Generate Dynamic UPI QR for this product price
-        const upiPayString = `upi://pay?pa=${STORE_UPI_ID}&pn=BodolandFashion&am=${selectedItem.price}&cu=INR`;
-        document.getElementById("qrImg").src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(upiPayString)}`;
+        const upiPayString = `upi://pay?pa=${STORE_UPI_ID}&pn=Bodoland%20Fashion&am=${checkoutTotalAmount}&cu=INR`;
+        document.getElementById("qrImg").src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiPayString)}`;
       } else {
         btnCod.classList.add('selected');
         btnUpi.classList.remove('selected');
@@ -166,82 +362,26 @@
       }
     }
 
-    async function fetchProducts() {
-      const grid = document.getElementById("productGrid");
-      const { data, error } = await client.from("products").select("*").order("id", { ascending: false });
-
-      if (error || !data || data.length === 0) {
-        grid.innerHTML = "<p style='grid-column: 1/-1; text-align:center; color:#94a3b8; padding:30px;'>No products in store yet.</p>";
-        return;
-      }
-      allProducts = data;
-      render(allProducts);
-    }
-
-    function render(list) {
-      const grid = document.getElementById("productGrid");
-      grid.innerHTML = list.map(p => `
-        <div class="card">
-          <img class="card-img" src="${p.image_url || 'https://via.placeholder.com/300x300?text=No+Image'}" alt="${p.name}" />
-          <div class="card-body">
-            <span class="cat-tag">${p.category || 'Fashion'}</span>
-            <div class="p-title">${p.name}</div>
-            <div class="p-price">₹${Number(p.price).toFixed(2)}</div>
-            <button class="order-btn" onclick="openOrder('${p.name}', ${p.price}, ${p.id})">Buy Now</button>
-          </div>
-        </div>
-      `).join("");
-    }
-
-    function filterCat(cat) {
-      document.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c.innerText === cat));
-      if (cat === 'All') render(allProducts);
-      else render(allProducts.filter(p => (p.category || '').toLowerCase() === cat.toLowerCase()));
-    }
-
-    function openOrder(name, price, id) {
-      selectedItem = { name, price, id };
-      chosenSize = "M";
-      selectPayment("COD");
-      document.querySelectorAll('.size-btn').forEach(b => b.classList.toggle('selected', b.innerText === 'M'));
-      document.getElementById("modalTitle").innerText = name;
-      document.getElementById("modalPrice").innerText = "₹" + Number(price).toFixed(2);
-      document.getElementById("orderModal").style.display = "flex";
-    }
-
-    function closeModal() {
-      document.getElementById("orderModal").style.display = "none";
-    }
-
-    async function submitOrder() {
+    async function submitFinalOrder() {
       const name = document.getElementById("custName").value.trim();
       const phone = document.getElementById("custPhone").value.trim();
       const address = document.getElementById("custAddress").value.trim();
       const upiRef = document.getElementById("upiTxnId").value.trim();
 
-      if (!name || !phone || !address) {
-        alert("Please fill all details!");
-        return;
-      }
-
-      if (chosenPayment === 'UPI' && !upiRef) {
-        alert("Please enter UPI Reference / UTR Number after scanning the QR code!");
-        return;
-      }
+      if (!name || !phone || !address) return alert("Please fill all contact & address details!");
+      if (chosenPayment === 'UPI' && !upiRef) return alert("Please enter the UPI Reference / UTR Number after payment!");
 
       const btn = document.getElementById("submitBtn");
       btn.innerText = "Placing...";
       btn.disabled = true;
 
-      const payNote = chosenPayment === 'UPI' ? `Paid via UPI (Ref: ${upiRef})` : "Cash on Delivery";
-      const itemWithDetails = `${selectedItem.name} [Size: ${chosenSize}] [${payNote}]`;
-
+      const payNote = chosenPayment === 'UPI' ? `Paid via UPI (UTR: ${upiRef})` : "Cash on Delivery";
       const orderData = {
         customer_name: name,
         phone: phone,
         address: `${address} | Payment: ${payNote}`,
-        total: selectedItem.price,
-        items: [{ product: itemWithDetails, price: selectedItem.price, qty: 1 }]
+        total: checkoutTotalAmount,
+        items: checkoutItems
       };
 
       const { error } = await client.from("orders").insert([orderData]);
@@ -249,8 +389,10 @@
       if (error) {
         alert("Error: " + error.message);
       } else {
-        alert("Order placed successfully! (" + payNote + ")");
-        closeModal();
+        alert("Order placed successfully! Details sent to Admin Panel.");
+        cart = [];
+        saveCart();
+        closeCheckoutModal();
       }
       btn.innerText = "Place Order";
       btn.disabled = false;
