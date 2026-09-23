@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin - Add Product</title>
   
-  <!-- Supabase CDN Library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
@@ -67,6 +66,27 @@
     .row .form-group {
       flex: 1;
     }
+    .size-chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .size-btn {
+      padding: 8px 14px;
+      border-radius: 6px;
+      border: 1px solid #243547;
+      background: #0b1118;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+    .size-btn.active {
+      border-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+    }
     button.submit-btn {
       width: 100%;
       padding: 12px;
@@ -120,6 +140,23 @@
       </div>
 
       <div class="form-group">
+        <label>Available Sizes</label>
+        <div class="size-chips" id="sizeChips">
+          <button type="button" class="size-btn" data-size="S">S</button>
+          <button type="button" class="size-btn" data-size="M">M</button>
+          <button type="button" class="size-btn" data-size="L">L</button>
+          <button type="button" class="size-btn" data-size="XL">XL</button>
+          <button type="button" class="size-btn" data-size="XXL">XXL</button>
+          <button type="button" class="size-btn" data-size="Free Size">Free Size</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="colors">Colors (Comma separated)</label>
+        <input type="text" id="colors" placeholder="e.g. Red, Grey, White" />
+      </div>
+
+      <div class="form-group">
         <label for="description">Product Description</label>
         <textarea id="description" rows="3" placeholder="Cotton fabric, regular fit..."></textarea>
       </div>
@@ -129,12 +166,26 @@
   </div>
 
   <script>
-    // Supabase Configuration
     const SUPABASE_URL = "https://vtrpbwhupdqzegchyche.supabase.co";
-    // Niche apni copied API Key paste karein (sb_publishable_...)
-    const SUPABASE_KEY = "APNI_COPIED_KEY_YAHAN_PASTE_KAREIN";
+    const SUPABASE_KEY = "sb_publishable_GSAPqd9xHsp0BkkVYHdrNQ_zw37bsNm";
 
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const sizeButtons = document.querySelectorAll(".size-btn");
+    const selectedSizes = [];
+
+    sizeButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const size = btn.getAttribute("data-size");
+        btn.classList.toggle("active");
+        if (btn.classList.contains("active")) {
+          selectedSizes.push(size);
+        } else {
+          const index = selectedSizes.indexOf(size);
+          if (index > -1) selectedSizes.splice(index, 1);
+        }
+      });
+    });
 
     const form = document.getElementById("productForm");
     const submitBtn = document.getElementById("submitBtn");
@@ -150,6 +201,8 @@
       const mrp = Number(document.getElementById("mrp").value);
       const price = Number(document.getElementById("price").value);
       const description = document.getElementById("description").value;
+      const colors = document.getElementById("colors").value;
+      const sizes = selectedSizes.join(", ");
 
       try {
         const { data, error } = await supabaseClient
@@ -160,16 +213,18 @@
               category: category,
               mrp: mrp,
               price: price,
-              description: description
+              description: description,
+              colors: colors,
+              sizes: sizes
             }
           ]);
 
-        if (error) {
-          throw error;
-        }
+        if (error) throw error;
 
-        alert("✅ Product Supabase me successfully save ho gaya!");
+        alert("✅ Product with Sizes & Colors saved successfully!");
         form.reset();
+        selectedSizes.length = 0;
+        sizeButtons.forEach(b => b.classList.remove("active"));
       } catch (err) {
         console.error("Save Error:", err);
         alert("❌ Error: " + (err.message || err));
