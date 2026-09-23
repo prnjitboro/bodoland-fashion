@@ -3,327 +3,192 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Dashboard - Bodoland Fashion</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <title>Admin - Add Product</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: #0b1329; color: #f8fafc; padding: 16px; }
-    .container { max-width: 960px; margin: 0 auto; }
-    
-    /* Login Gate */
-    #loginGate { display: flex; align-items: center; justify-content: center; min-height: 80vh; }
-    .login-card { background: #16203a; border: 1px solid #1e293b; padding: 30px; border-radius: 12px; width: 100%; max-width: 360px; box-shadow: 0 10px 25px rgba(0,0,0,0.4); text-align: center; }
-    .login-card h2 { margin-bottom: 20px; font-size: 1.3rem; color: #38bdf8; }
-    .login-card input { width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: #fff; margin-bottom: 15px; }
-    .login-card button { width: 100%; padding: 12px; background: #0284c7; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
-
-    /* Dashboard */
-    #adminContent { display: none; }
-    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #1e293b; padding-bottom: 12px; }
-    h1 { font-size: 1.4rem; color: #38bdf8; }
-    .card { background: #16203a; border-radius: 10px; padding: 18px; margin-bottom: 24px; border: 1px solid #1e293b; }
-    h2 { font-size: 1.05rem; margin-bottom: 14px; color: #94a3b8; border-bottom: 1px solid #1e293b; padding-bottom: 8px; }
-    
-    label { display: block; font-size: 0.78rem; font-weight: 600; color: #94a3b8; margin: 8px 0 4px; text-transform: uppercase; }
-    input, select { width: 100%; padding: 10px; margin-bottom: 10px; background: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 6px; font-size: 0.9rem; }
-    
-    /* File Upload Box */
-    .file-drop-box { border: 2px dashed #334155; border-radius: 8px; padding: 16px; text-align: center; background: #0f172a; margin-bottom: 12px; cursor: pointer; }
-    .preview-container { text-align: center; margin-bottom: 12px; display: none; }
-    #previewImg { max-width: 140px; max-height: 140px; border-radius: 6px; object-fit: cover; border: 1px solid #38bdf8; }
-
-    .btn { background: #0284c7; color: white; padding: 12px 16px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; width: 100%; font-size: 0.95rem; }
-    .btn-danger { background: #dc2626; padding: 6px 10px; border: none; border-radius: 4px; color: white; cursor: pointer; font-size: 0.75rem; }
-    .logout-btn { background: #334155; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; }
-
-    /* Orders Table */
-    .table-wrap { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; min-width: 650px; }
-    th, td { text-align: left; padding: 10px; border-bottom: 1px solid #1e293b; vertical-align: top; }
-    th { color: #94a3b8; font-size: 0.75rem; text-transform: uppercase; }
-    
-    .badge { padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; display: inline-block; }
-    .badge-pending { background: #ca8a04; color: #fff; }
-    .badge-confirmed { background: #0284c7; color: #fff; }
-    .badge-shipped { background: #9333ea; color: #fff; }
-    .badge-delivered { background: #16a34a; color: #fff; }
-
-    .status-select { background: #0f172a; color: #fff; border: 1px solid #334155; border-radius: 4px; padding: 4px 6px; font-size: 0.75rem; margin-top: 4px; width: auto; }
-    .wa-link { background: #22c55e; color: #000; text-decoration: none; padding: 5px 9px; border-radius: 4px; font-weight: bold; font-size: 0.75rem; display: inline-block; margin-top: 4px; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    body {
+      background-color: #0f172a;
+      color: #f8fafc;
+      padding: 20px;
+    }
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      background: #1e293b;
+      padding: 24px;
+      border-radius: 12px;
+      border: 1px solid #334155;
+    }
+    h2 {
+      margin-bottom: 20px;
+      font-size: 1.3rem;
+      text-align: center;
+      color: #38bdf8;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    label {
+      display: block;
+      font-size: 0.9rem;
+      margin-bottom: 6px;
+      color: #cbd5e1;
+    }
+    input[type="text"],
+    input[type="number"],
+    textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 6px;
+      border: 1px solid #475569;
+      background: #0f172a;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+    }
+    input:focus, textarea:focus {
+      border-color: #38bdf8;
+    }
+    /* Upload Box */
+    .file-drop-box {
+      display: block;
+      cursor: pointer;
+      text-align: center;
+      border: 2px dashed #38bdf8;
+      border-radius: 8px;
+      padding: 24px 16px;
+      background: #0f172a;
+      transition: background 0.2s;
+    }
+    .file-drop-box:hover {
+      background: #172554;
+    }
+    .file-drop-box span {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 6px;
+    }
+    .file-drop-box p {
+      font-size: 0.85rem;
+      color: #38bdf8;
+    }
+    /* Image Preview */
+    .preview-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .preview-card {
+      width: 75px;
+      height: 75px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #475569;
+      background: #0f172a;
+    }
+    .preview-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .btn-submit {
+      width: 100%;
+      background: #16a34a;
+      color: #fff;
+      border: none;
+      padding: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 16px;
+    }
+    .btn-submit:hover {
+      background: #15803d;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Password Screen -->
-  <div id="loginGate">
-    <div class="login-card">
-      <h2>Admin Login</h2>
-      <input type="password" id="adminPassInput" placeholder="Enter Security Password" />
-      <button onclick="checkPassword()">Unlock Panel</button>
-      <p id="errorMsg" style="color: #ef4444; font-size: 0.85rem; margin-top: 10px; display: none;">Incorrect password!</p>
-    </div>
-  </div>
+  <div class="container">
+    <h2>Add New Product</h2>
 
-  <!-- Main Dashboard -->
-  <div class="container" id="adminContent">
-    <header>
-      <h1>Bodoland Fashion Admin</h1>
-      <button class="logout-btn" onclick="logout()">Lock Panel</button>
-    </header>
-
-    <!-- Add Product with Direct Phone Gallery Upload -->
-    <div class="card">
-      <h2>Add New Product</h2>
-      
-      <label>Product Name</label>
-      <input type="text" id="pName" placeholder="e.g. Slim Fit Cotton Shirt" />
-      
-      <label>Category</label>
-      <select id="pCat">
-        <option value="Men">Men</option>
-        <option value="Women">Women</option>
-        <option value="Kids">Kids</option>
-      </select>
-      
-      <label>Price (₹)</label>
-      <input type="number" id="pPrice" placeholder="e.g. 699" />
-      
-      <label>Product Photo (Choose from Phone Gallery)</label>
-      <div class="file-drop-box" onclick="document.getElementById('fileInput').click()">
-        <span style="font-size: 1.5rem;">📁</span>
-        <p style="font-size:0.85rem; color:#38bdf8; margin-top:4px;">Tap to select photo from Gallery / Camera</p>
-        <input type="file" id="fileInput" multiple accept="image/*" style="display:none;" onchange="handleFile(this)" />
+    <form id="productForm">
+      <div class="form-group">
+        <label>Product Name</label>
+        <input type="text" placeholder="e.g. T-Shirt" required />
       </div>
 
-      <!-- Image Preview -->
-      <div class="preview-container" id="previewBox">
-        <img id="previewImg" src="" alt="Preview" />
-        <p style="font-size:0.75rem; color:#4ade80; margin-top:4px;">✓ Photo selected</p>
+      <div class="form-group">
+        <label>Price (₹)</label>
+        <input type="number" placeholder="e.g. 499" required />
       </div>
 
-      <button class="btn" id="addBtn" onclick="addProduct()">Upload & Add to Store</button>
-    </div>
+      <div class="form-group">
+        <label>Product Photos (Choose from Phone Gallery)</label>
+        
+        <!-- File Input Label -->
+        <label class="file-drop-box" for="fileInput">
+          <span>📁</span>
+          <p>Tap to select multiple photos</p>
+        </label>
 
-    <!-- Customer Orders -->
-    <div class="card">
-      <h2>Customer Orders & Fulfillment</h2>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Order ID</th>
-              <th>Customer</th>
-              <th>Items & Total</th>
-              <th>Delivery Address</th>
-              <th>Status & Action</th>
-            </tr>
-          </thead>
-          <tbody id="ordersBody"></tbody>
-        </table>
-      </div>
-    </div>
+        <!-- Hidden Multiple File Input -->
+        <input 
+          type="file" 
+          id="fileInput" 
+          name="photos" 
+          multiple 
+          accept="image/*" 
+          style="display: none;" 
+          onchange="handleFiles(this)" 
+        />
 
-    <!-- Inventory -->
-    <div class="card">
-      <h2>Active Products in Store</h2>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Photo</th>
-              <th>Name</th>
-              <th>Category</th>
-              <th>Price</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="productsBody"></tbody>
-        </table>
+        <!-- Image Previews Container -->
+        <div id="previewContainer" class="preview-container"></div>
       </div>
-    </div>
+
+      <button type="submit" class="btn-submit">Save Product</button>
+    </form>
   </div>
 
   <script>
-    const ADMIN_PASSWORD = "admin@bodoland";
-    const SUPABASE_URL = "https://vtrpbwhupdqzegchyoha.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_GSAPqd9xHsp0BkkVYHdrNQ_zw37bsNm";
-    const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    function handleFiles(input) {
+      const container = document.getElementById('previewContainer');
+      container.innerHTML = ''; // Pehle ki previews clear karne ke liye
 
-    let base64ImageString = "";
+      if (input.files && input.files.length > 0) {
+        Array.from(input.files).forEach(file => {
+          if (!file.type.startsWith('image/')) return;
 
-    function checkPassword() {
-      const input = document.getElementById("adminPassInput").value;
-      if (input === ADMIN_PASSWORD) {
-        sessionStorage.setItem("isAdminAuthed", "true");
-        showDashboard();
-      } else {
-        document.getElementById("errorMsg").style.display = "block";
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            const card = document.createElement('div');
+            card.className = 'preview-card';
+
+            const img = document.createElement('img');
+            img.src = e.target.result;
+
+            card.appendChild(img);
+            container.appendChild(card);
+          };
+          reader.readAsDataURL(file);
+        });
       }
     }
 
-    function logout() {
-      sessionStorage.removeItem("isAdminAuthed");
-      location.reload();
-    }
-
-    function showDashboard() {
-      document.getElementById("loginGate").style.display = "none";
-      document.getElementById("adminContent").style.display = "block";
-      loadProducts();
-      loadOrders();
-    }
-
-    window.onload = () => {
-      if (sessionStorage.getItem("isAdminAuthed") === "true") {
-        showDashboard();
-      }
-    };
-
-    // Compress & Convert Gallery Photo
-    function handleFile(input) {
-      const file = input.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const img = new Image();
-        img.onload = function() {
-          const canvas = document.createElement("canvas");
-          const MAX_WIDTH = 500;
-          const scale = MAX_WIDTH / img.width;
-          canvas.width = MAX_WIDTH;
-          canvas.height = img.height * scale;
-
-          const ctx = canvas.getContext("2d");
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-          
-          base64ImageString = canvas.toDataURL("image/jpeg", 0.7);
-          document.getElementById("previewImg").src = base64ImageString;
-          document.getElementById("previewBox").style.display = "block";
-        };
-        img.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-
-    async function loadProducts() {
-      const tbody = document.getElementById("productsBody");
-      const { data } = await client.from("products").select("*").order("id", { ascending: false });
-      if (!data) return;
-      tbody.innerHTML = data.map(p => `
-        <tr>
-          <td><img src="${p.image_url || 'https://via.placeholder.com/40'}" style="width:40px; height:40px; border-radius:4px; object-fit:cover;" /></td>
-          <td><b>${p.name}</b></td>
-          <td>${p.category || '-'}</td>
-          <td style="color:#4ade80; font-weight:bold;">₹${p.price}</td>
-          <td><button class="btn-danger" onclick="deleteProduct(${p.id})">Delete</button></td>
-        </tr>
-      `).join("");
-    }
-
-    async function addProduct() {
-      const name = document.getElementById("pName").value.trim();
-      const category = document.getElementById("pCat").value;
-      const price = parseFloat(document.getElementById("pPrice").value);
-
-      if (!name || isNaN(price)) return alert("Please enter Product Name and Price!");
-      if (!base64ImageString) return alert("Please select a photo from your gallery!");
-
-      const btn = document.getElementById("addBtn");
-      btn.innerText = "Uploading photo & saving...";
-      btn.disabled = true;
-
-      const { error } = await client.from("products").insert([
-        { name, category, price, image_url: base64ImageString }
-      ]);
-
-      if (error) {
-        alert("Upload error: " + error.message);
-      } else {
-        alert("Product added successfully!");
-        document.getElementById("pName").value = "";
-        document.getElementById("pPrice").value = "";
-        document.getElementById("fileInput").value = "";
-        document.getElementById("previewBox").style.display = "none";
-        base64ImageString = "";
-        loadProducts();
-      }
-
-      btn.innerText = "Upload & Add to Store";
-      btn.disabled = false;
-    }
-
-    async function deleteProduct(id) {
-      if (!confirm("Are you sure you want to delete this product?")) return;
-      await client.from("products").delete().eq("id", id);
-      loadProducts();
-    }
-
-    async function updateOrderStatus(orderId, newStatus) {
-      let statuses = JSON.parse(localStorage.getItem("order_statuses") || "{}");
-      statuses[orderId] = newStatus;
-      localStorage.setItem("order_statuses", JSON.stringify(statuses));
-      loadOrders();
-    }
-
-    async function loadOrders() {
-      const tbody = document.getElementById("ordersBody");
-      const { data } = await client.from("orders").select("*").order("id", { ascending: false });
-      if (!data || data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#94a3b8; padding:20px;">No orders received yet.</td></tr>`;
-        return;
-      }
-
-      const savedStatuses = JSON.parse(localStorage.getItem("order_statuses") || "{}");
-
-      tbody.innerHTML = data.map(o => {
-        const status = savedStatuses[o.id] || "Pending";
-        const cleanPhone = (o.phone || "").replace(/[^0-9]/g, '');
-        
-        let itemsText = "";
-        if (Array.isArray(o.items)) {
-          itemsText = o.items.map(i => `${i.product} (x${i.qty || 1})`).join("<br/>");
-        } else {
-          itemsText = o.product_name || "1 item";
-        }
-
-        const waMessage = encodeURIComponent(
-          `Hello ${o.customer_name || 'Customer'},\nThank you for shopping at Bodoland Fashion!\n\nYour Order #${o.id} status is: *${status.toUpperCase()}*.\nItems: ${itemsText.replace(/<br\/>/g, ', ')}\nTotal: ₹${o.total || 0}\n\nDelivery to:\n${o.address}`
-        );
-
-        let badgeClass = "badge-pending";
-        if (status === "Confirmed") badgeClass = "badge-confirmed";
-        if (status === "Shipped") badgeClass = "badge-shipped";
-        if (status === "Delivered") badgeClass = "badge-delivered";
-
-        return `
-          <tr>
-            <td><span style="font-weight:bold; color:#38bdf8;">#${o.id}</span></td>
-            <td>
-              <strong>${o.customer_name || 'Anonymous'}</strong><br/>
-              <span style="color:#94a3b8; font-size:0.8rem;">📱 ${o.phone || '-'}</span>
-            </td>
-            <td>
-              <div style="font-size:0.85rem; line-height:1.4;">${itemsText}</div>
-              <div style="color:#4ade80; font-weight:bold; margin-top:4px;">Total: ₹${o.total || 0}</div>
-            </td>
-            <td style="max-width:200px; font-size:0.8rem; line-height:1.4; color:#cbd5e1;">${o.address || '-'}</td>
-            <td>
-              <span class="badge ${badgeClass}">${status}</span><br/>
-              <select class="status-select" onchange="updateOrderStatus(${o.id}, this.value)">
-                <option value="Pending" ${status === 'Pending' ? 'selected' : ''}>Pending</option>
-                <option value="Confirmed" ${status === 'Confirmed' ? 'selected' : ''}>Confirmed</option>
-                <option value="Shipped" ${status === 'Shipped' ? 'selected' : ''}>Shipped</option>
-                <option value="Delivered" ${status === 'Delivered' ? 'selected' : ''}>Delivered</option>
-              </select><br/>
-              <a href="https://wa.me/91${cleanPhone}?text=${waMessage}" target="_blank" class="wa-link">
-                💬 WhatsApp Update
-              </a>
-            </td>
-          </tr>
-        `;
-      }).join("");
-    }
+    // Form submit test handler
+    document.getElementById('productForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('Form submitted successfully!');
+    });
   </script>
+
 </body>
 </html>
