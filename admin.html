@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin - Add Product</title>
+  
+  <!-- Supabase CDN Library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     * {
       box-sizing: border-box;
@@ -12,49 +16,43 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
     body {
-      background-color: #0f172a;
-      color: #f8fafc;
-      padding: 20px;
+      background-color: #0b1118;
+      color: #e2e8f0;
+      display: flex;
+      justify-content: center;
+      padding: 20px 14px;
+      min-height: 100vh;
     }
-    .container {
+    .form-container {
+      background: #111a24;
+      border: 1px solid #1e293b;
+      border-radius: 14px;
+      width: 100%;
       max-width: 480px;
-      margin: 0 auto;
-      background: #1e293b;
       padding: 24px;
-      border-radius: 12px;
-      border: 1px solid #334155;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
     }
     h2 {
-      margin-bottom: 20px;
-      font-size: 1.3rem;
       text-align: center;
       color: #38bdf8;
+      margin-bottom: 20px;
+      font-size: 1.3rem;
     }
     .form-group {
-      margin-bottom: 16px;
-    }
-    .form-row {
-      display: flex;
-      gap: 12px;
-    }
-    .form-row .form-group {
-      flex: 1;
+      margin-bottom: 14px;
     }
     label {
       display: block;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
+      color: #94a3b8;
       margin-bottom: 6px;
-      color: #cbd5e1;
     }
-    input[type="text"],
-    input[type="number"],
-    select,
-    textarea {
+    input, select, textarea {
       width: 100%;
       padding: 10px 12px;
-      border-radius: 6px;
-      border: 1px solid #475569;
-      background: #0f172a;
+      border-radius: 8px;
+      border: 1px solid #243547;
+      background: #0b1118;
       color: #fff;
       font-size: 0.95rem;
       outline: none;
@@ -62,245 +60,123 @@
     input:focus, select:focus, textarea:focus {
       border-color: #38bdf8;
     }
-    /* Size Selector Badges */
-    .size-selector {
+    .row {
       display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .size-selector label {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 8px 14px;
-      background: #0f172a;
-      border: 1px solid #475569;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.85rem;
-      color: #cbd5e1;
-      margin-bottom: 0;
-      user-select: none;
-    }
-    .size-selector input[type="checkbox"] {
-      display: none;
-    }
-    .size-selector input[type="checkbox"]:checked + span {
-      color: #38bdf8;
-      font-weight: 700;
-    }
-    .size-selector label:has(input[type="checkbox"]:checked) {
-      border-color: #38bdf8;
-      background: #172554;
-    }
-    /* Upload Box */
-    .file-drop-box {
-      display: block;
-      cursor: pointer;
-      text-align: center;
-      border: 2px dashed #38bdf8;
-      border-radius: 8px;
-      padding: 24px 16px;
-      background: #0f172a;
-      transition: background 0.2s;
-    }
-    .file-drop-box:hover {
-      background: #172554;
-    }
-    .file-drop-box span {
-      font-size: 2rem;
-      display: block;
-      margin-bottom: 6px;
-    }
-    .file-drop-box p {
-      font-size: 0.85rem;
-      color: #38bdf8;
-    }
-    /* Image Preview */
-    .preview-container {
-      display: flex;
-      flex-wrap: wrap;
       gap: 10px;
-      margin-top: 12px;
     }
-    .preview-card {
-      width: 75px;
-      height: 75px;
-      border-radius: 8px;
-      overflow: hidden;
-      border: 1px solid #475569;
-      background: #0f172a;
+    .row .form-group {
+      flex: 1;
     }
-    .preview-card img {
+    button.submit-btn {
       width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .btn-submit {
-      width: 100%;
-      background: #16a34a;
-      color: #fff;
-      border: none;
       padding: 12px;
-      font-size: 1rem;
+      background: #0284c7;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
       font-weight: 600;
-      border-radius: 6px;
+      font-size: 1rem;
       cursor: pointer;
-      margin-top: 16px;
+      margin-top: 10px;
+      transition: 0.2s;
     }
-    .btn-submit:hover {
-      background: #15803d;
+    button.submit-btn:active {
+      background: #0369a1;
+      transform: scale(0.98);
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
+  <div class="form-container">
     <h2>Add New Product</h2>
-
+    
     <form id="productForm">
-      <!-- Product Name -->
       <div class="form-group">
-        <label for="productName">Product Name</label>
-        <input type="text" id="productName" placeholder="e.g. Oversized Black Hoodie" required />
+        <label for="title">Product Name</label>
+        <input type="text" id="title" placeholder="e.g. Men Graphic T-Shirt" required />
       </div>
 
-      <!-- Category -->
       <div class="form-group">
-        <label for="productCategory">Category</label>
-        <select id="productCategory" required>
-          <option value="">Select Category</option>
+        <label for="category">Category</label>
+        <select id="category" required>
           <option value="T-Shirts">T-Shirts</option>
-          <option value="Hoodies & Jackets">Hoodies & Jackets</option>
-          <option value="Pants & Cargo">Pants & Cargo</option>
-          <option value="Footwear">Footwear / Shoes</option>
+          <option value="Shirts">Shirts</option>
+          <option value="Jeans">Jeans</option>
+          <option value="Jackets">Jackets</option>
           <option value="Accessories">Accessories</option>
         </select>
       </div>
 
-      <!-- Prices: MRP and Selling Price -->
-      <div class="form-row">
+      <div class="row">
         <div class="form-group">
-          <label for="productMrp">Original MRP (₹)</label>
-          <input type="number" id="productMrp" placeholder="e.g. 1499" />
+          <label for="mrp">Original MRP (₹)</label>
+          <input type="number" id="mrp" placeholder="999" required />
         </div>
         <div class="form-group">
-          <label for="productPrice">Offer Price (₹)</label>
-          <input type="number" id="productPrice" placeholder="e.g. 799" required />
-        </div>
-      </div>
-
-      <!-- Stock & Colors -->
-      <div class="form-row">
-        <div class="form-group">
-          <label for="productStock">Stock Quantity</label>
-          <input type="number" id="productStock" placeholder="e.g. 25" min="1" required />
-        </div>
-        <div class="form-group">
-          <label for="productColors">Colors (Comma separated)</label>
-          <input type="text" id="productColors" placeholder="e.g. Black, Grey, White" />
+          <label for="price">Offer Price (₹)</label>
+          <input type="number" id="price" placeholder="599" required />
         </div>
       </div>
 
-      <!-- Available Sizes -->
       <div class="form-group">
-        <label>Available Sizes</label>
-        <div class="size-selector">
-          <label><input type="checkbox" name="sizes" value="S"><span>S</span></label>
-          <label><input type="checkbox" name="sizes" value="M"><span>M</span></label>
-          <label><input type="checkbox" name="sizes" value="L"><span>L</span></label>
-          <label><input type="checkbox" name="sizes" value="XL"><span>XL</span></label>
-          <label><input type="checkbox" name="sizes" value="XXL"><span>XXL</span></label>
-          <label><input type="checkbox" name="sizes" value="Free Size"><span>Free Size</span></label>
-        </div>
+        <label for="description">Product Description</label>
+        <textarea id="description" rows="3" placeholder="Cotton fabric, regular fit..."></textarea>
       </div>
 
-      <!-- Description -->
-      <div class="form-group">
-        <label for="productDescription">Product Description</label>
-        <textarea id="productDescription" rows="3" placeholder="Enter fabric details, fit details, wash care, etc."></textarea>
-      </div>
-
-      <!-- Photos Upload -->
-      <div class="form-group">
-        <label>Product Photos</label>
-        <label class="file-drop-box" for="fileInput">
-          <span>📁</span>
-          <p>Tap to select multiple photos</p>
-        </label>
-        <input 
-          type="file" 
-          id="fileInput" 
-          name="photos" 
-          multiple 
-          accept="image/*" 
-          style="display: none;" 
-          onchange="handleFiles(this)" 
-        />
-        <div id="previewContainer" class="preview-container"></div>
-      </div>
-
-      <button type="submit" class="btn-submit">Save Product</button>
+      <button type="submit" id="submitBtn" class="submit-btn">Save Product</button>
     </form>
   </div>
 
   <script>
-    let uploadedImages = [];
+    // Supabase Configuration
+    const SUPABASE_URL = "https://vtrpbwhupdqzegchyche.supabase.co";
+    // Niche apni copied API Key paste karein (sb_publishable_...)
+    const SUPABASE_KEY = "APNI_COPIED_KEY_YAHAN_PASTE_KAREIN";
 
-    function handleFiles(input) {
-      const container = document.getElementById('previewContainer');
-      container.innerHTML = '';
-      uploadedImages = [];
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-      if (input.files && input.files.length > 0) {
-        Array.from(input.files).forEach(file => {
-          if (!file.type.startsWith('image/')) return;
+    const form = document.getElementById("productForm");
+    const submitBtn = document.getElementById("submitBtn");
 
-          const reader = new FileReader();
-          reader.onload = function(e) {
-            uploadedImages.push(e.target.result);
-
-            const card = document.createElement('div');
-            card.className = 'preview-card';
-
-            const img = document.createElement('img');
-            img.src = e.target.result;
-
-            card.appendChild(img);
-            container.appendChild(card);
-          };
-          reader.readAsDataURL(file);
-        });
-      }
-    }
-
-    // Form submit listener - data pack hone ka ready object
-    document.getElementById('productForm').addEventListener('submit', function(e) {
+    form.addEventListener("submit", async function(e) {
       e.preventDefault();
+      
+      submitBtn.innerText = "Saving to Database...";
+      submitBtn.disabled = true;
 
-      // Selected sizes nikaalna
-      const selectedSizes = Array.from(document.querySelectorAll('input[name="sizes"]:checked')).map(cb => cb.value);
+      const title = document.getElementById("title").value;
+      const category = document.getElementById("category").value;
+      const mrp = Number(document.getElementById("mrp").value);
+      const price = Number(document.getElementById("price").value);
+      const description = document.getElementById("description").value;
 
-      // Colors list nikaalna
-      const colors = document.getElementById('productColors').value
-        .split(',')
-        .map(c => c.trim())
-        .filter(c => c.length > 0);
+      try {
+        const { data, error } = await supabaseClient
+          .from("products")
+          .insert([
+            {
+              title: title,
+              category: category,
+              mrp: mrp,
+              price: price,
+              description: description
+            }
+          ]);
 
-      const productData = {
-        name: document.getElementById('productName').value,
-        category: document.getElementById('productCategory').value,
-        mrp: document.getElementById('productMrp').value,
-        price: document.getElementById('productPrice').value,
-        stock: document.getElementById('productStock').value,
-        colors: colors,
-        sizes: selectedSizes,
-        description: document.getElementById('productDescription').value,
-        photos: uploadedImages
-      };
+        if (error) {
+          throw error;
+        }
 
-      console.log('Final Product Data:', productData);
-      alert('Product Data Ready: ' + productData.name);
+        alert("✅ Product Supabase me successfully save ho gaya!");
+        form.reset();
+      } catch (err) {
+        console.error("Save Error:", err);
+        alert("❌ Error: " + (err.message || err));
+      } finally {
+        submitBtn.innerText = "Save Product";
+        submitBtn.disabled = false;
+      }
     });
   </script>
 
