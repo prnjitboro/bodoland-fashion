@@ -33,6 +33,13 @@
     .form-group {
       margin-bottom: 16px;
     }
+    .form-row {
+      display: flex;
+      gap: 12px;
+    }
+    .form-row .form-group {
+      flex: 1;
+    }
     label {
       display: block;
       font-size: 0.9rem;
@@ -41,6 +48,7 @@
     }
     input[type="text"],
     input[type="number"],
+    select,
     textarea {
       width: 100%;
       padding: 10px 12px;
@@ -51,8 +59,39 @@
       font-size: 0.95rem;
       outline: none;
     }
-    input:focus, textarea:focus {
+    input:focus, select:focus, textarea:focus {
       border-color: #38bdf8;
+    }
+    /* Size Selector Badges */
+    .size-selector {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .size-selector label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 14px;
+      background: #0f172a;
+      border: 1px solid #475569;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      margin-bottom: 0;
+      user-select: none;
+    }
+    .size-selector input[type="checkbox"] {
+      display: none;
+    }
+    .size-selector input[type="checkbox"]:checked + span {
+      color: #38bdf8;
+      font-weight: 700;
+    }
+    .size-selector label:has(input[type="checkbox"]:checked) {
+      border-color: #38bdf8;
+      background: #172554;
     }
     /* Upload Box */
     .file-drop-box {
@@ -120,26 +159,75 @@
     <h2>Add New Product</h2>
 
     <form id="productForm">
+      <!-- Product Name -->
       <div class="form-group">
-        <label>Product Name</label>
-        <input type="text" placeholder="e.g. T-Shirt" required />
+        <label for="productName">Product Name</label>
+        <input type="text" id="productName" placeholder="e.g. Oversized Black Hoodie" required />
       </div>
 
+      <!-- Category -->
       <div class="form-group">
-        <label>Price (₹)</label>
-        <input type="number" placeholder="e.g. 499" required />
+        <label for="productCategory">Category</label>
+        <select id="productCategory" required>
+          <option value="">Select Category</option>
+          <option value="T-Shirts">T-Shirts</option>
+          <option value="Hoodies & Jackets">Hoodies & Jackets</option>
+          <option value="Pants & Cargo">Pants & Cargo</option>
+          <option value="Footwear">Footwear / Shoes</option>
+          <option value="Accessories">Accessories</option>
+        </select>
       </div>
 
+      <!-- Prices: MRP and Selling Price -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="productMrp">Original MRP (₹)</label>
+          <input type="number" id="productMrp" placeholder="e.g. 1499" />
+        </div>
+        <div class="form-group">
+          <label for="productPrice">Offer Price (₹)</label>
+          <input type="number" id="productPrice" placeholder="e.g. 799" required />
+        </div>
+      </div>
+
+      <!-- Stock & Colors -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="productStock">Stock Quantity</label>
+          <input type="number" id="productStock" placeholder="e.g. 25" min="1" required />
+        </div>
+        <div class="form-group">
+          <label for="productColors">Colors (Comma separated)</label>
+          <input type="text" id="productColors" placeholder="e.g. Black, Grey, White" />
+        </div>
+      </div>
+
+      <!-- Available Sizes -->
       <div class="form-group">
-        <label>Product Photos (Choose from Phone Gallery)</label>
-        
-        <!-- File Input Label -->
+        <label>Available Sizes</label>
+        <div class="size-selector">
+          <label><input type="checkbox" name="sizes" value="S"><span>S</span></label>
+          <label><input type="checkbox" name="sizes" value="M"><span>M</span></label>
+          <label><input type="checkbox" name="sizes" value="L"><span>L</span></label>
+          <label><input type="checkbox" name="sizes" value="XL"><span>XL</span></label>
+          <label><input type="checkbox" name="sizes" value="XXL"><span>XXL</span></label>
+          <label><input type="checkbox" name="sizes" value="Free Size"><span>Free Size</span></label>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="form-group">
+        <label for="productDescription">Product Description</label>
+        <textarea id="productDescription" rows="3" placeholder="Enter fabric details, fit details, wash care, etc."></textarea>
+      </div>
+
+      <!-- Photos Upload -->
+      <div class="form-group">
+        <label>Product Photos</label>
         <label class="file-drop-box" for="fileInput">
           <span>📁</span>
           <p>Tap to select multiple photos</p>
         </label>
-
-        <!-- Hidden Multiple File Input -->
         <input 
           type="file" 
           id="fileInput" 
@@ -149,8 +237,6 @@
           style="display: none;" 
           onchange="handleFiles(this)" 
         />
-
-        <!-- Image Previews Container -->
         <div id="previewContainer" class="preview-container"></div>
       </div>
 
@@ -159,9 +245,12 @@
   </div>
 
   <script>
+    let uploadedImages = [];
+
     function handleFiles(input) {
       const container = document.getElementById('previewContainer');
-      container.innerHTML = ''; // Pehle ki previews clear karne ke liye
+      container.innerHTML = '';
+      uploadedImages = [];
 
       if (input.files && input.files.length > 0) {
         Array.from(input.files).forEach(file => {
@@ -169,6 +258,8 @@
 
           const reader = new FileReader();
           reader.onload = function(e) {
+            uploadedImages.push(e.target.result);
+
             const card = document.createElement('div');
             card.className = 'preview-card';
 
@@ -183,10 +274,33 @@
       }
     }
 
-    // Form submit test handler
+    // Form submit listener - data pack hone ka ready object
     document.getElementById('productForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      alert('Form submitted successfully!');
+
+      // Selected sizes nikaalna
+      const selectedSizes = Array.from(document.querySelectorAll('input[name="sizes"]:checked')).map(cb => cb.value);
+
+      // Colors list nikaalna
+      const colors = document.getElementById('productColors').value
+        .split(',')
+        .map(c => c.trim())
+        .filter(c => c.length > 0);
+
+      const productData = {
+        name: document.getElementById('productName').value,
+        category: document.getElementById('productCategory').value,
+        mrp: document.getElementById('productMrp').value,
+        price: document.getElementById('productPrice').value,
+        stock: document.getElementById('productStock').value,
+        colors: colors,
+        sizes: selectedSizes,
+        description: document.getElementById('productDescription').value,
+        photos: uploadedImages
+      };
+
+      console.log('Final Product Data:', productData);
+      alert('Product Data Ready: ' + productData.name);
     });
   </script>
 
